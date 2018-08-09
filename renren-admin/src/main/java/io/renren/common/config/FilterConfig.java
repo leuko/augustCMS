@@ -16,10 +16,13 @@
 
 package io.renren.common.config;
 
+import io.renren.common.cors.OriginFilter;
 import io.renren.common.xss.XssFilter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.filter.CorsFilter;
 import org.springframework.web.filter.DelegatingFilterProxy;
 
 import javax.servlet.DispatcherType;
@@ -32,6 +35,8 @@ import javax.servlet.DispatcherType;
  */
 @Configuration
 public class FilterConfig {
+
+    @Autowired OriginFilter originFilter;
 
     @Bean
     public FilterRegistrationBean shiroFilterRegistration() {
@@ -53,6 +58,15 @@ public class FilterConfig {
         registration.addUrlPatterns("/*");
         registration.setName("xssFilter");
         registration.setOrder(Integer.MAX_VALUE);
+        return registration;
+    }
+
+    @Bean
+    public FilterRegistrationBean coreFilterRegistration(){
+        FilterRegistrationBean registration = new FilterRegistrationBean();
+        registration.setFilter(originFilter);
+        registration.addUrlPatterns("/*");
+        registration.setOrder(Integer.MAX_VALUE-2);
         return registration;
     }
 }

@@ -40,10 +40,17 @@ public class SysPageController {
 		return "index";
 	}
 
+	@RequestMapping("index3.html")
+	public String index3(){
+		return "index3";
+	}
+
+
 	@RequestMapping("index1.html")
 	public String index1(){
 		return "index1";
 	}
+
 
 	@RequestMapping("login.html")
 	public String login(){

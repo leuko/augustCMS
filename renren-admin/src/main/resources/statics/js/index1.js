@@ -109,11 +109,12 @@ var vm = new Vue({
         }).use(['navtab','layer'], function(){
             window.jQuery = window.$ = layui.jquery;
             window.layer = layui.layer;
-            var element = layui.element();
+            // var element = layui.element();
             var  navtab = layui.navtab({
                 elem: '.larry-tab-box',
                 closed:false
             });
+            debugger;
             $('#larry-nav-side').children('ul').find('li').each(function () {
                 var $this = $(this);
                 if ($this.find('dl').length > 0) {

@@ -37,6 +37,7 @@ public abstract class AbstractController {
 
 	protected Long getUserId() {
 		return getUser().getUserId();
+//		return 1L;
 	}
 
 	protected Long getDeptId() {
