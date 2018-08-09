@@ -43,8 +43,12 @@ public class CustomGeneratorService {
         return sysGeneratorDao.queryColumns(tableName);
     }
 
-    public void generatorCode(String project, String moduleName, String packageName, String tableName, List<String> sqlColumns) {
+    public void generatorCode(String project, String moduleName, String packageName, String tableName, List<String> sqlColumns) throws Exception {
 
+        Map<String, String> queryTable = queryTable(tableName);
+        if(queryTable!=null){
+            throw new Exception("生成错误：表"+tableName+"已经存在！");
+        }
         //生成临时表
         sysGeneratorDao.createTmpTable(tmpTableName, sqlColumns);
 

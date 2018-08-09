@@ -18,7 +18,6 @@ INSERT INTO `sys_menu`(`parent_id`, `name`, `url`, `perms`, `type`, `icon`, `ord
 --创建表
 CREATE TABLE `${tableName}` (
     #foreach ($column in $sqlColumns)
-        $column ,
+        $column
     #end
-PRIMARY KEY(`id`)
 )ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;

@@ -119,8 +119,8 @@ public class LeuGenUtils {
         prop.put("file.resource.loader.class", "org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader");
         Velocity.init(prop);
 
-//        String mainPath = config.getString("mainPath");
-//        mainPath = StringUtils.isBlank(mainPath) ? "io.renren" : mainPath;
+        String mainPath = config.getString("mainPath");
+        mainPath = StringUtils.isBlank(mainPath) ? "io.renren" : mainPath;
 
         //封装模板数据
         Map<String, Object> map = new HashMap<>();
@@ -132,7 +132,7 @@ public class LeuGenUtils {
         map.put("pathName", tableEntity.getClassname().toLowerCase());
         map.put("columns", tableEntity.getColumns());
         map.put("hasBigDecimal", hasBigDecimal);
-//        map.put("mainPath", mainPath);
+        map.put("mainPath", mainPath);
         map.put("package", packageName);
         map.put("moduleName", moduleName);
         map.put("author", config.getString("author"));
@@ -158,7 +158,7 @@ public class LeuGenUtils {
                 IOUtils.closeQuietly(sw);
                 templateOutput.close();
             } catch (Exception e) {
-                throw new RRException("渲染模板失败，表名：" + tableEntity.getTableName(), e);
+                throw new RRException("渲染模板失败，表名：" + tableEntity.getTableName()+"，原因："+e.getMessage());
             }
         }
     }
@@ -230,7 +230,7 @@ public class LeuGenUtils {
         }
 
         if (template.contains("ServiceImpl.java.vm")) {
-            new File(packagePath + "service").mkdirs();
+            new File(packagePath + "service" + File.separator + "impl").mkdirs();
             return packagePath + "service" + File.separator + "impl" + File.separator + className + "ServiceImpl.java";
         }
 

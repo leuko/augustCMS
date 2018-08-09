@@ -34,7 +34,7 @@
 	<update id="createTmpTable">
 		CREATE TABLE ${tableName}
 		(
-			<foreach collection="columns" item="column" separator=",">
+			<foreach collection="columns" item="column">
                 ${column}
             </foreach>
   		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
