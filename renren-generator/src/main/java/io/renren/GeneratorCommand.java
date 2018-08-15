@@ -29,7 +29,7 @@ public class GeneratorCommand {
         // 配置包名
         String packageName = "io.renren.modules";
         // 配置表名
-        String table = "articles";
+        String table = "article";
         // 配置字段
         ArrayList<String> columns = new ArrayList<>();
         columns.add("`id` int(10) unsigned NOT NULL AUTO_INCREMENT , ");

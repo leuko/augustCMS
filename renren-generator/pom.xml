@@ -78,6 +78,14 @@
 			<groupId>org.apache.velocity</groupId>
 			<version>${velocity.version}</version>
 		</dependency>
+
+		<!--Singular to plural english word converter-->
+		<dependency>
+			<groupId>org.atteo</groupId>
+			<artifactId>evo-inflector</artifactId>
+			<version>1.2.2</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>

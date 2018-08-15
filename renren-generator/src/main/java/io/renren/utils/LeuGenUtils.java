@@ -77,7 +77,7 @@ public class LeuGenUtils {
         tableEntity.setComments(table.get("tableComment"));
 
         //表名转换成Java类名
-        String className = tableToJava(tableEntity.getTableName(), config.getString("tablePrefix"));
+        String className = tableToJava(table.get("className"), config.getString("tablePrefix"));
         tableEntity.setClassName(className);
         tableEntity.setClassname(StringUtils.uncapitalize(className));
 

@@ -4,6 +4,7 @@ import io.renren.dao.SysGeneratorDao;
 import io.renren.utils.LeuGenUtils;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.StringUtils;
+import org.atteo.evo.inflector.English;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -45,6 +46,8 @@ public class CustomGeneratorService {
 
     public void generatorCode(String project, String moduleName, String packageName, String tableName, List<String> sqlColumns) throws Exception {
 
+        String className = tableName;
+        tableName = English.plural(tableName);
         Map<String, String> queryTable = queryTable(tableName);
         if(queryTable!=null){
             throw new Exception("生成错误：表"+tableName+"已经存在！");
@@ -60,6 +63,9 @@ public class CustomGeneratorService {
 
         // 重置表名
         table.put("tableName", tableName);
+
+        // 类名
+        table.put("className", className);
 
         //生成代码
         LeuGenUtils.generatorCode(table, columns, project, moduleName, packageName, sqlColumns);
