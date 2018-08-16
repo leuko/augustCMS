@@ -6,11 +6,11 @@ spring:
       first:  #数据源1
         url: jdbc:mysql://localhost:3306/renren_security?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8
         username: root
-        password: llpz
+        password:
       second:  #数据源2
         url: jdbc:mysql://localhost:3306/renren_security?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8
         username: root
-        password: llpz
+        password:
       initial-size: 10
       max-active: 100
       min-idle: 10

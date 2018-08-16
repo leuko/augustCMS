@@ -44,7 +44,7 @@ public class CustomGeneratorService {
         return sysGeneratorDao.queryColumns(tableName);
     }
 
-    public void generatorCode(String project, String moduleName, String packageName, String tableName, List<String> sqlColumns) throws Exception {
+    public void generatorCode(String project, String moduleName, String packageName, String menuName, String tableName, List<String> sqlColumns) throws Exception {
 
         String className = tableName;
         tableName = English.plural(tableName);
@@ -66,6 +66,9 @@ public class CustomGeneratorService {
 
         // 类名
         table.put("className", className);
+
+        // 表注释
+        table.put("tableComment", menuName);
 
         //生成代码
         LeuGenUtils.generatorCode(table, columns, project, moduleName, packageName, sqlColumns);

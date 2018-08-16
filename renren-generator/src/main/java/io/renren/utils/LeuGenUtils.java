@@ -52,6 +52,7 @@ public class LeuGenUtils {
         templates.add("template_leu/ServiceImpl.java.vm");
         templates.add("template_leu/Controller.java.vm");
         templates.add("template_leu/table_menu.sql.vm");
+        templates.add("template_leu/vue.vm");
 //        templates.add("template_leu/list.js.vm");
         return templates;
     }
@@ -201,6 +202,10 @@ public class LeuGenUtils {
                 project + File.separator + "src" + File.separator + "main" + File.separator;
 
         String packagePath = projectPath + "java" + File.separator;
+
+        String vueTemplatePath = System.getProperty("user.dir") + File.separator +
+                project + File.separator + "admin-template" + File.separator + "src" + File.separator + "components" + File.separator;
+
         if (StringUtils.isNotBlank(packageName)) {
             packagePath += packageName.replace(".", File.separator) + File.separator;
         }
@@ -245,6 +250,10 @@ public class LeuGenUtils {
             return resourcesPath + "db" + File.separator + "migration" + File.separator + "V" + version + "__create_table_" + className.toLowerCase() + "_menu.sql";
         }
 
+        if(template.contains("vue.vm")) {
+            return  vueTemplatePath + className.toLowerCase() + ".vue";
+        }
+
 //        if (template.contains("list.vue.vm")) {
 //            new File(resourcesPath + "templates" + File.separator + "modules" + File.separator + moduleName).mkdirs();
 //            return resourcesPath + "templates" + File.separator
@@ -260,5 +269,6 @@ public class LeuGenUtils {
         Optional<Integer> first = stream.map(item -> Integer.valueOf(item.substring(1, item.indexOf('_'))))
                 .sorted((v1, v2) -> v2 - v1).findFirst();
         return first.orElse(0);
+
     }
 }

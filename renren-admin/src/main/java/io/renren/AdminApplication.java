@@ -21,6 +21,4 @@ public class AdminApplication extends SpringBootServletInitializer {
 	}
 
 
-
-
 }

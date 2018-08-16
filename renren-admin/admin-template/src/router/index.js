@@ -11,6 +11,7 @@ import Config from "@/components/config"
 import Schedule from "@/components/schedule"
 import ScheduleLog from "@/components/scheduleLog"
 import DruidSql from "@/components/druidSql"
+import Article from "@/components/article"
 
 Vue.use(Router)
 export default new Router({
@@ -58,6 +59,11 @@ export default new Router({
     {
       path:"/sql",
       component:DruidSql
+    },
+    {
+
+      path:"/article",
+      component:Article
     }
   ]
 })
