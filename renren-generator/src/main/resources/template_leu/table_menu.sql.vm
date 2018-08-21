@@ -1,3 +1,5 @@
+
+#if( $comments && $comments != "" )
 -- 菜单SQL
 INSERT INTO `sys_menu`(`parent_id`, `name`, `url`, `perms`, `type`, `icon`, `order_num`)
 VALUES ('1', '${comments}', 'modules/${moduleName}/${pathName}.html', NULL, '1', 'fa fa-file-code-o', '6');
@@ -14,10 +16,11 @@ INSERT INTO `sys_menu`(`parent_id`, `name`, `url`, `perms`, `type`, `icon`, `ord
   SELECT @parentId, '修改', null, '${moduleName}:${pathName}:update', '2', null, '6';
 INSERT INTO `sys_menu`(`parent_id`, `name`, `url`, `perms`, `type`, `icon`, `order_num`)
   SELECT @parentId, '删除', null, '${moduleName}:${pathName}:delete', '2', null, '6';
+#end
 
 -- 创建表
 CREATE TABLE `${tableName}` (
     #foreach ($column in $sqlColumns)
         $column
     #end
-)ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
+)ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COMMENT "${comments}";

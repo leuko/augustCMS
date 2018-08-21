@@ -45,6 +45,11 @@ public class SysPageController {
 		return "index3";
 	}
 
+	@RequestMapping("index5.html")
+	public String index5(){
+		return "index5";
+	}
+
 
 	@RequestMapping("index1.html")
 	public String index1(){

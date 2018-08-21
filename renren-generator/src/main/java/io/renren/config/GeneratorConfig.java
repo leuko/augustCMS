@@ -31,6 +31,8 @@ public class GeneratorConfig {
 
     private String menuName;
 
+    private List<String> columnList = new ArrayList<String>();
+
     public String getMenuName() {
         return menuName;
     }
@@ -46,9 +48,6 @@ public class GeneratorConfig {
     public void setColumnList(List<String> columnList) {
         this.columnList = columnList;
     }
-
-    private List<String> columnList = new ArrayList<String>();
-
 
     public String getModuleName() {
         return moduleName;

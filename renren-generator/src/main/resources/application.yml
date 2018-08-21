@@ -29,21 +29,12 @@ mybatis:
 # mysql逆向生成
 generator:
    project: renren-admin
-   moduleName: cms
+   moduleName: sys
    packageName: io.renren.modules
-   table: article
-   menuName: 文章管理
+   table: qrtz_trigger
+   menuName: 用户表
    columnList:
       -  id int(10) unsigned NOT NULL AUTO_INCREMENT ,
-      -  article_category_id int NULL DEFAULT 0,
-      -  article_title varchar(128) NULL ,
-      -  article_desc varchar(256) NULL ,
-      -  artical_body TEXT NULL ,
-      -  status tinyint(2) NOT NULL DEFAULT 0 ,
-      -  meta_title varchar(128) NULL ,
-      -  meta_desc varchar(256) NULL ,
-      -  updated_at datetime NULL ,
-      -  created_at datetime NULL ,
       -  PRIMARY KEY (id)
 
 
