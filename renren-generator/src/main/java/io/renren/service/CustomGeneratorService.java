@@ -46,6 +46,10 @@ public class CustomGeneratorService {
 
     public void generatorCode(String project, String moduleName, String packageName, String menuName, String tableName, List<String> sqlColumns) throws Exception {
 
+        if(tableName==null){
+            throw new Exception("生成错误：配置表名不能为空！");
+        }
+
         String className = tableName;
         tableName = English.plural(tableName);
         Map<String, String> queryTable = queryTable(tableName);

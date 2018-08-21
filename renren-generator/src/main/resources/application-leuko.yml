@@ -1,0 +1,70 @@
+
+# mysql
+spring:
+    datasource:
+        type: com.alibaba.druid.pool.DruidDataSource
+        driverClassName: com.mysql.jdbc.Driver
+        url: jdbc:mysql://localhost:3306/renren_security?useUnicode=true&characterEncoding=UTF-8&useSSL=false
+        username: root
+        password: llpz
+    jackson:
+        time-zone: GMT+8
+        date-format: yyyy-MM-dd HH:mm:ss
+    resources:
+            static-locations: classpath:/static/,classpath:/views/
+
+# mysql逆向生成
+generator:
+   project: renren-admin
+   moduleName: spider
+   packageName: io.renren.modules
+
+#   table: spider_project
+#   menuName: 数据采集
+#   columnList:
+#      -  id int(10) unsigned NOT NULL AUTO_INCREMENT ,
+#      -  name varchar(64) NULL ,
+#      -  list_url varchar(256) NULL COMMENT "列表URL, url中可以有{page}" ,
+#      -  charset_name varchar(32) NOT NULL DEFAULT "UTF-8" COMMENT "抓取的网站编码：UTF-8，GBK，GB2312" ,
+#      -  page_start tinyint(5) DEFAULT 1 COMMENT "抓取起始页，会替换列表URL中的{page}" ,
+#      -  page_end tinyint(5) DEFAULT 1 COMMENT "抓取结束页，会替换列表URL中的{page}" ,
+#      -  spider_option_user_agent varchar(256) NULL COMMENT "伪造User-Agent" ,
+#      -  spider_option_referer varchar(256) NULL COMMENT "伪造来源" ,
+#      -  spider_option_cookie varchar(256) NULL COMMENT "伪造Cookie" ,
+#      -  spider_option_header varchar(256) NULL COMMENT "伪造header" ,
+#      -  spider_option_timeout varchar(256) NULL COMMENT "connection timeout seconds" ,
+#      -  detail_url_selector varchar(256) NULL COMMENT "抓取详情页url的选择器语法，兼容CSS or Jquery" ,
+#      -  pic_url_selector varchar(256) NULL COMMENT "抓取详情页缩略图的选择器语法，兼容CSS or Jquery" ,
+#      -  title_selector varchar(256) NULL COMMENT "抓取详情页title的选择器语法，兼容CSS or Jquery" ,
+#      -  date_selector varchar(256) NULL COMMENT "抓取详情页发布日期的选择器语法，兼容CSS or Jquery" ,
+#      -  to_table varchar(32) NULL COMMENT "抓取的数据插入的表" ,
+#      -  create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP() NOT NULL ,
+#      -  PRIMARY KEY (id)
+
+#   table: spider_project_column
+#   menuName:
+#   columnList:
+#      -  id INT unsigned NOT NULL AUTO_INCREMENT ,
+#      -  spider_project_id INT NOT NULL ,
+#      -  table_column varchar(32) NOT NULL COMMENT "对应表字段" ,
+#      -  field_selector varchar(256) NOT NULL COMMENT "详情页的字段选择器，兼容CSS or Jquery" ,
+#      -  content_whitelist_type varchar(32) NOT NULL DEFAULT "none" COMMENT "过滤内容白名单类型：none,simpleText,basic,basicWithImages,relaxed" ,
+#      -  PRIMARY KEY (id),
+#      -  KEY (spider_project_id)
+
+#   table: spider_log
+#   menuName:
+#   columnList:
+#      -  id INT unsigned NOT NULL AUTO_INCREMENT ,
+#      -  spider_project_id INT NOT NULL DEFAULT 0 ,
+#      -  detail_url varchar(256) NULL COMMENT "详情页URL" ,
+#      -  content TEXT NULL COMMENT "抓取内容" ,
+#      -  status tinyint(1) DEFAULT 1 COMMENT "抓取成功与否" ,
+#      -  try_count INT NOT NULL DEFAULT 0 COMMENT "失败重试次数" ,
+#      -  error_msg TEXT NULL COMMENT "抓取失败原因" ,
+#      -  last_try_time TIMESTAMP NULL COMMENT "最后一次重试时间" ,
+#      -  create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP() NOT NULL ,
+#      -  PRIMARY KEY (id),
+#      -  KEY (spider_project_id, detail_url)
+
+

@@ -42,7 +42,6 @@ public class GeneratorCommand {
         String menuName = generatorConfig.getMenuName();
 
         // 执行生成代码
-        System.out.println(table);
         try {
             generatorService.generatorCode(project, moduleName, packageName, menuName, table, columns);
             System.out.println("代码生成成功！");
