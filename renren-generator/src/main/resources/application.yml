@@ -31,17 +31,12 @@ generator:
    project: renren-admin
    moduleName: cms
    packageName: io.renren.modules
-   table: article
-   menuName: 文章管理
+   table: article_category
+   menuName: 文章类别
    columnList:
       -  id int(10) unsigned NOT NULL AUTO_INCREMENT ,
-      -  article_category_id int NULL DEFAULT 0,
-      -  article_title varchar(128) NULL ,
-      -  article_desc varchar(256) NULL ,
-      -  artical_body TEXT NULL ,
-      -  status tinyint(2) NOT NULL DEFAULT 0 ,
-      -  meta_title varchar(128) NULL ,
-      -  meta_desc varchar(256) NULL ,
+      -  category_name varchar(32) NULL ,
+      -  category_remark varchar(128) NULL ,
       -  updated_at datetime NULL ,
       -  created_at datetime NULL ,
       -  PRIMARY KEY (id)

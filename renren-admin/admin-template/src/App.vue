@@ -95,16 +95,9 @@
       }
       console.log("执行")
       isquery=false;
-      layui.config({
-        base: 'statics/js/',
-      }).use(['navtab','layer'], function(){
-        window.jQuery = window.$ = layui.jquery;
+      layui.use(['layer','element','laydate'],function(){
         window.layer = layui.layer;
-        var element = layui.element();
-        var  navtab = layui.navtab({
-          elem: '.larry-tab-box',
-          closed:false
-        });
+        var element = layui.element;
         $('#larry-nav-side').children('ul').find('li').each(function () {
           var $this = $(this);
           if ($this.find('dl').length > 0) {
@@ -117,12 +110,12 @@
                 var href = "/user"
                 var icon = $a.children('i:first').data('icon');
                 var title = $a.children('span').text();
-                var data = {
-//                  href: href,
-                  icon: icon,
-                  title: title
-                }
-               // navtab.tabAdd(data);
+//                var data = {
+////                  href: href,
+//                  icon: icon,
+//                  title: title
+//                }
+                // navtab.tabAdd(data);
               });
             });
           } else {
@@ -216,3 +209,20 @@
     }
   }
 </script>
+<style>
+  .custom-form-horizontal{
+    width:80% !important;
+  }
+  /*.note-editor{*/
+    /*border:1px solid #ddd;*/
+    /*min-width:900px;*/
+    /*min-height: 1100px;*/
+    /*margin-left:55px;*/
+  /*}*/
+  /*.note-statusbar{*/
+    /*display: none;*/
+  /*}*/
+  /*.modal-backdrop.in{*/
+    /*display:none;*/
+  /*}*/
+</style>
