@@ -1,5 +1,8 @@
 <template>
     <div>
+        <div class="select-file-modal" style="display: none;">
+            <fileupload  ref="fileupload" @selectFileResult="selectFileResult"></fileupload>
+        </div>
         <div v-show="showList">
             <div class="grid-btn">
                 <a class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
@@ -16,13 +19,9 @@
             <div class="col-sm-2 control-label">缩略图:</div>
             <div class="col-sm-10">
               <div class="image-crop">
-                <img src="" style="min-width:200px;min-height:150px;" >
+                <img :src="article.thumbnail" style="width:200px;height:150px;margin-bottom:20px;" >
               </div>
-              <div class="btn-group" style="margin:20px 0;">
-                <label title="上传图片" for="inputImage" class="btn btn-primary">
-                  <input type="file" accept="image/*"  @change="thumbnailChange" name="file" id="inputImage" class="hide">上传缩略图
-                </label>
-              </div>
+              <button class="btn btn-primary" @click="openFileSelected">上传缩略图</button>
             </div>
           </div>
           <div class="form-group">
@@ -67,7 +66,7 @@
             <div class="col-sm-10">
               <div class="checkbox">
                 <label>
-                  <input type="checkbox" v-model="article.status"> 是否置顶推荐
+                  <input type="checkbox" v-model="article.isTop"> 是否置顶推荐
                 </label>
               </div>
             </div>
@@ -85,9 +84,10 @@
 <script>
     import {dateFormat} from './../utils/index';
     import Editor from './Editor.vue';
+    import fileupload from './fileupload.vue';
     export default{
         components:{
-          Editor
+          Editor,fileupload
         },
         data(){
             return{
@@ -102,8 +102,11 @@
                     articleCategoryId:1,
                     articalBody:"",
                     status:0,
+                    isTop:0,
                     createdAt:dateFormat("yyyy-MM-dd",new Date)
-                }
+                },
+                layerIndex:null
+
             }
         },
         created(){
@@ -168,41 +171,6 @@
           }
         },
         updated(){
-          var $image = $(".image-crop > img")
-          $($image).cropper({
-            aspectRatio: 1.618,
-            preview: ".img-preview",
-            done: function (data) {
-              // 输出结果
-            }
-          });
-
-          var $inputImage = $("#inputImage");
-          if (window.FileReader) {
-            $inputImage.change(function () {
-              var fileReader = new FileReader(),
-                files = this.files,
-                file;
-
-              if (!files.length) {
-                return;
-              }
-
-              file = files[0];
-
-              if (/^image\/\w+$/.test(file.type)) {
-                fileReader.readAsDataURL(file);
-                fileReader.onload = function () {
-                  $inputImage.val("");
-                  $image.cropper("reset", true).cropper("replace", this.result);
-                };
-              } else {
-                showMessage("请选择图片文件");
-              }
-            });
-          } else {
-            $inputImage.addClass("hide");
-          }
           layui.use(['laydate'],()=>{
             window.laydate = layui.laydate;
             window.laydate.render({
@@ -216,12 +184,31 @@
           })
         },
         methods: {
+            selectFileResult(data){
+              this.article.thumbnail = data.url;
+              layer.close(this.layerIndex);
+            },
+            openFileSelected(e){
+              this.layerIndex = layer.open({
+                type: 1,
+                skin:'select-file-modal',
+                title: "选择图片",
+                area: ['850px', '600px'],
+//                shadeClose: true,
+                content: $(".select-file-modal"),
+                btn: ['确定', '取消'],
+                btn1:function(index){
+                    console.log(index)
+                }
+              });
+            },
             thumbnailChange(e){
               console.log(e);
               this.article.thumbnail = e.target.files;
             },
             saveOrUpdate(event){
               this.article.status?this.article.status=1:this.article.status=0;
+              this.article.isTop?this.article.isTop=1:this.article.isTop=0;
               this.article.articalBody = window.editor.txt.html();
               this.article.createdAt = new Date(this.article.createdAt).getTime();
               var url = this.article.id == null ? "cms/article/save" : "cms/article/update";
@@ -256,6 +243,8 @@
                   this.article.articleTitle = r.article.articleTitle;
                   this.article.articleDesc = r.article.articleDesc;
                   this.article.articleCategoryId = r.article.articleCategoryId;
+                  this.article.thumbnail = r.article.thumbnail;
+                  this.article.isTop = r.article.isTop;
                   this.article.articalBody = r.article.articalBody;
                   window.editor.txt.html(r.article.articalBody);
                   this.article.status = r.article.status;
@@ -274,7 +263,6 @@
               if(ids == null){
                 return ;
               }
-
               confirm('确定要删除选中的记录？',()=>{
                 $.ajax({
                   type: "POST",
@@ -295,7 +283,17 @@
             },
             reload: function (event) {
               this.showList = true;
-              this.article = {articleTitle:"",articleCategoryId:0,articleDesc:"",articalBody:"",createdAt:dateFormat("yyyy-MM-dd",new Date())};
+              this.article = {
+                    articleTitle:"",
+                    articleCategoryId:0,
+                    articleDesc:"",
+                    isTop:0,
+                    status:0,
+                    thumbnail:"",
+                    articalBody:"",
+                    createdAt:dateFormat("yyyy-MM-dd",new Date())
+              };
+              window.editor.txt.clear()
               var page = $("#jqGrid").jqGrid('getGridParam','page');
               $("#jqGrid").jqGrid('setGridParam',{
                 page:page
@@ -304,4 +302,11 @@
         }
     }
 </script>
-<style></style>
+<style lang="less">
+  .select-file-modal{
+     padding:20px;
+  }
+  .layui-layer-shade{
+    display: none;
+  }
+</style>

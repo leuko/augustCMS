@@ -164,12 +164,15 @@
       this.getConfig();
     },
     mounted(){
-      $(function () {
+      $(()=>{
         $("#jqGrid").jqGrid({
           url: baseURL + 'sys/oss/list',
           datatype: "json",
           colModel: [
             { label: 'id', name: 'id', width: 20, key: true },
+            { label: '缩略图', name: 'url', width: 20, key: true, formatter:function(cellValue){
+                  return "<img style='width:50px;height:50px;' src='"+ cellValue  +"'/>"
+            } },
             { label: 'URL地址', name: 'url', width: 160 },
             { label: '创建时间', name: 'createDate', width: 40 }
           ],
@@ -193,7 +196,7 @@
             rows:"limit",
             order: "order"
           },
-          gridComplete:function(){
+          gridComplete:()=>{
             //隐藏grid底部滚动条
             $("#jqGrid").closest(".ui-jqgrid-bdiv").css({ "overflow-x" : "hidden" });
           }

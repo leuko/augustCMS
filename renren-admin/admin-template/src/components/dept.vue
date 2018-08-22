@@ -206,7 +206,7 @@
           shadeClose: false,
           content: jQuery("#deptLayer"),
           btn: ['确定', '取消'],
-          btn1: function (index) {
+          btn1: (index)=>{
             var node = ztree.getSelectedNodes();
             //选择上级部门
             this.dept.parentId = node[0].deptId;

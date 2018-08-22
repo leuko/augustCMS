@@ -81,7 +81,7 @@
         menuList: {},
         password: '',
         newPassword: '',
-        navTitle: "首页",
+        navTitle: "首页"
       }
     },
     created(){
@@ -192,10 +192,10 @@
               url: "sys/user/password",
               data: data,
               dataType: "json",
-              success: function (result) {
+              success:(result) =>{
                 if (result.code == 0) {
                   layer.close(index);
-                  layer.alert('修改成功', function (index) {
+                  layer.alert('修改成功', (index)=>{
                     location.reload();
                   });
                 } else {

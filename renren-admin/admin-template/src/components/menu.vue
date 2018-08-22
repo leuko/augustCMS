@@ -157,7 +157,7 @@
       }
 
 
-      $(function () {
+      $(()=>{
         var colunms = Menu.initColumn();
         var table = new TreeTable(Menu.id, baseURL + "sys/menu/list", colunms);
         table.setExpandColumn(2);
@@ -206,7 +206,7 @@
           return ;
         }
 
-        confirm('确定要删除选中的记录？', function(){
+        confirm('确定要删除选中的记录？',()=>{
           $.ajax({
             type: "POST",
             url: baseURL + "sys/menu/delete",
@@ -223,7 +223,7 @@
           });
         });
       },
-      saveOrUpdate: function () {
+      saveOrUpdate:()=>{
         if(this.validator()){
           return ;
         }
@@ -236,7 +236,7 @@
           data: JSON.stringify(this.menu),
           success: function(r){
             if(r.code === 0){
-              alert('操作成功', function(){
+              alert('操作成功',()=>{
                 this.reload();
               });
             }else{
@@ -256,7 +256,7 @@
           shadeClose: false,
           content: jQuery("#menuLayer"),
           btn: ['确定', '取消'],
-          btn1: function (index) {
+          btn1:(index)=>{
             var node = ztree.getSelectedNodes();
             //选择上级菜单
             this.menu.parentId = node[0].menuId;
