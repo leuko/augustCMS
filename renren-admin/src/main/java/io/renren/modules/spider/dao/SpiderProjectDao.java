@@ -3,6 +3,8 @@ package io.renren.modules.spider.dao;
 import io.renren.modules.spider.entity.SpiderProjectEntity;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
 
+import java.io.Serializable;
+
 /**
  * 数据采集
  * 
@@ -11,5 +13,6 @@ import com.baomidou.mybatisplus.mapper.BaseMapper;
  * @date 2018-08-21 17:58:10
  */
 public interface SpiderProjectDao extends BaseMapper<SpiderProjectEntity> {
-	
+
+    SpiderProjectEntity selectByIdWithColumn(Serializable serializable);
 }

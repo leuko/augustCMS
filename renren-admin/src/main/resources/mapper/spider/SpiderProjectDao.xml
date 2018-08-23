@@ -25,7 +25,35 @@
         <result property="titleSelector" column="title_selector"/>
         <result property="toTable" column="to_table"/>
         <result property="createTime" column="create_time"/>
+        <collection property="columnEntity" ofType="io.renren.modules.spider.entity.SpiderProjectColumnEntity" columnPrefix="columnEntity.">
+            <result property="id" column="id"/>
+            <result property="spiderProjectId" column="spider_project_id"/>
+            <result property="tableColumn" column="table_column"/>
+            <result property="fieldSelector" column="field_selector"/>
+            <result property="defaultValue" column="default_value"/>
+            <result property="isPic" column="is_pic"/>
+            <result property="isDate" column="is_date"/>
+            <result property="dateFormat" column="date_format"/>
+            <result property="contentWhitelistType" column="content_whitelist_type"/>
+        </collection>
     </resultMap>
+
+    <select id="selectByIdWithColumn" resultMap="spiderProjectMap">
+      SELECT   p.id, name,list_url,method,return_content_type,charset_name,page_start,page_end,spider_option_user_agent,
+      spider_option_referer,spider_option_cookie,spider_option_header, spider_option_post_data, spider_option_timeout, detail_url_selector,
+      detail_url_artifact, pic_url_selector, title_selector, to_table,create_time,
+      c.id as "columnEntity.id",
+      c.spider_project_id as "columnEntity.spider_project_id",
+      c.table_column as "columnEntity.table_column",
+      c.field_selector as "columnEntity.field_selector",
+      c.default_value as "columnEntity.default_value",
+      c.is_pic as "columnEntity.is_pic",
+      c.is_date as "columnEntity.is_date",
+      c.date_format as "columnEntity.date_format",
+      c.content_whitelist_type as "columnEntity.content_whitelist_type"
+      FROM spider_projects p left join spider_project_columns c on p.id=c.spider_project_id
+      where p.id=#{id}
+    </select>
 
 
 </mapper>

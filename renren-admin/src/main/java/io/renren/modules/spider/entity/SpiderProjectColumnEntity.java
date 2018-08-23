@@ -163,4 +163,19 @@ public class SpiderProjectColumnEntity implements Serializable {
 	public String getContentWhitelistType() {
 		return contentWhitelistType;
 	}
+
+	@Override
+	public String toString() {
+		return "SpiderProjectColumnEntity{" +
+				"id=" + id +
+				", spiderProjectId=" + spiderProjectId +
+				", tableColumn='" + tableColumn + '\'' +
+				", fieldSelector='" + fieldSelector + '\'' +
+				", defaultValue='" + defaultValue + '\'' +
+				", isPic=" + isPic +
+				", isDate=" + isDate +
+				", dateFormat='" + dateFormat + '\'' +
+				", contentWhitelistType='" + contentWhitelistType + '\'' +
+				'}';
+	}
 }

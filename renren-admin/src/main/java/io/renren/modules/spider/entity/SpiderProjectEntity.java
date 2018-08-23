@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotations.TableName;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 数据采集
@@ -98,6 +99,8 @@ public class SpiderProjectEntity implements Serializable {
 	 * 
 	 */
 	private Date createTime;
+
+	private List<SpiderProjectColumnEntity> columnEntity;
 
 	/**
 	 * 设置：
@@ -338,5 +341,40 @@ public class SpiderProjectEntity implements Serializable {
 	 */
 	public Date getCreateTime() {
 		return createTime;
+	}
+
+	public List<SpiderProjectColumnEntity> getColumnEntity() {
+		return columnEntity;
+	}
+
+	public void setColumnEntity(List<SpiderProjectColumnEntity> columnEntity) {
+		this.columnEntity = columnEntity;
+	}
+
+	@Override
+	public String toString() {
+		return "SpiderProjectEntity{" +
+				"id=" + id +
+				", name='" + name + '\'' +
+				", listUrl='" + listUrl + '\'' +
+				", method='" + method + '\'' +
+				", returnContentType='" + returnContentType + '\'' +
+				", charsetName='" + charsetName + '\'' +
+				", pageStart=" + pageStart +
+				", pageEnd=" + pageEnd +
+				", spiderOptionUserAgent='" + spiderOptionUserAgent + '\'' +
+				", spiderOptionReferer='" + spiderOptionReferer + '\'' +
+				", spiderOptionCookie='" + spiderOptionCookie + '\'' +
+				", spiderOptionHeader='" + spiderOptionHeader + '\'' +
+				", spiderOptionPostData='" + spiderOptionPostData + '\'' +
+				", spiderOptionTimeout='" + spiderOptionTimeout + '\'' +
+				", detailUrlSelector='" + detailUrlSelector + '\'' +
+				", detailUrlArtifact='" + detailUrlArtifact + '\'' +
+				", picUrlSelector='" + picUrlSelector + '\'' +
+				", titleSelector='" + titleSelector + '\'' +
+				", toTable='" + toTable + '\'' +
+				", createTime=" + createTime +
+				", columnEntity=" + columnEntity +
+				'}';
 	}
 }
