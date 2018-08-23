@@ -81,30 +81,26 @@
         menuList: {},
         password: '',
         newPassword: '',
-        navTitle: "首页",
+        navTitle: "首页"
       }
     },
     created(){
       this.getMenuList();
       this.getUser();
     },
-    updated(){
+    mounted(){
 
+    },
+    updated(){
       if($("#larry-side .layui-nav-item>a").length==0 || !isquery){
         return;
       }
       console.log("执行")
       isquery=false;
-      layui.config({
-        base: 'statics/js/',
-      }).use(['navtab','layer'], function(){
-        window.jQuery = window.$ = layui.jquery;
+      layui.use(['layer','element','laydate','laypage'],function(){
         window.layer = layui.layer;
-        var element = layui.element();
-        var  navtab = layui.navtab({
-          elem: '.larry-tab-box',
-          closed:false
-        });
+        window.laypage = layui.laypage;
+        var element = layui.element;
         $('#larry-nav-side').children('ul').find('li').each(function () {
           var $this = $(this);
           if ($this.find('dl').length > 0) {
@@ -117,12 +113,12 @@
                 var href = "/user"
                 var icon = $a.children('i:first').data('icon');
                 var title = $a.children('span').text();
-                var data = {
-//                  href: href,
-                  icon: icon,
-                  title: title
-                }
-               // navtab.tabAdd(data);
+//                var data = {
+////                  href: href,
+//                  icon: icon,
+//                  title: title
+//                }
+                // navtab.tabAdd(data);
               });
             });
           } else {
@@ -170,6 +166,7 @@
         });
 
       });
+
     },
     methods:{
       getMenuList() {
@@ -199,10 +196,10 @@
               url: "sys/user/password",
               data: data,
               dataType: "json",
-              success: function (result) {
+              success:(result) =>{
                 if (result.code == 0) {
                   layer.close(index);
-                  layer.alert('修改成功', function (index) {
+                  layer.alert('修改成功', (index)=>{
                     location.reload();
                   });
                 } else {
@@ -216,3 +213,20 @@
     }
   }
 </script>
+<style>
+  .custom-form-horizontal{
+    width:80% !important;
+  }
+  /*.note-editor{*/
+    /*border:1px solid #ddd;*/
+    /*min-width:900px;*/
+    /*min-height: 1100px;*/
+    /*margin-left:55px;*/
+  /*}*/
+  /*.note-statusbar{*/
+    /*display: none;*/
+  /*}*/
+  /*.modal-backdrop.in{*/
+    /*display:none;*/
+  /*}*/
+</style>

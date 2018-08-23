@@ -39,7 +39,6 @@ public class ArticleController {
     @RequiresPermissions("cms:article:list")
     public R list(@RequestParam Map<String, Object> params){
         PageUtils page = articleService.queryPage(params);
-
         return R.ok().put("page", page);
     }
 
@@ -61,6 +60,7 @@ public class ArticleController {
     @RequestMapping("/save")
     @RequiresPermissions("cms:article:save")
     public R save(@RequestBody ArticleEntity article){
+
         articleService.insert(article);
 
         return R.ok();
@@ -72,7 +72,7 @@ public class ArticleController {
     @RequestMapping("/update")
     @RequiresPermissions("cms:article:update")
     public R update(@RequestBody ArticleEntity article){
-        ValidatorUtils.validateEntity(article);
+        //ValidatorUtils.validateEntity(article);
         articleService.updateAllColumnById(article);//全部更新
         
         return R.ok();

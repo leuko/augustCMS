@@ -21,7 +21,7 @@
       }
     },
     mounted(){
-      $(function () {
+      $(()=>{
         $("#jqGrid").jqGrid({
           url: baseURL + 'sys/scheduleLog/list',
           datatype: "json",
@@ -31,7 +31,7 @@
             { label: 'bean名称', name: 'beanName', width: 60 },
             { label: '方法名称', name: 'methodName', width: 60 },
             { label: '参数', name: 'params', width: 60 },
-            { label: '状态', name: 'status', width: 50, formatter: function(value, options, row){
+            { label: '状态', name: 'status', width: 50, formatter:(value, options, row)=>{
               return value === 0 ?
                 '<span class="label label-success">成功</span>' :
               '<span class="label label-danger pointer" onclick="this.showError('+row.logId+')">失败</span>';

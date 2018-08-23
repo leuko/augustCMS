@@ -53,6 +53,7 @@ public class AliyunCloudStorageService extends CloudStorageService {
         try {
             client.putObject(config.getAliyunBucketName(), path, inputStream);
         } catch (Exception e){
+            e.printStackTrace();
             throw new RRException("上传文件失败，请检查配置信息", e);
         }
 

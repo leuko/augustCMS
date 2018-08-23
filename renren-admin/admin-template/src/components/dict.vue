@@ -56,7 +56,7 @@
             rows:"limit",
             order: "order"
           },
-          gridComplete:function(){
+          gridComplete:()=>{
             //隐藏grid底部滚动条
             $("#jqGrid").closest(".ui-jqgrid-bdiv").css({ "overflow-x" : "hidden" });
           }
@@ -89,7 +89,7 @@
           url: baseURL + url,
           contentType: "application/json",
           data: JSON.stringify(this.dict),
-          success: function(r){
+          success: (r)=>{
             if(r.code === 0){
               alert('操作成功',(index)=>{
                 this.reload();
@@ -106,15 +106,15 @@
           return ;
         }
 
-        confirm('确定要删除选中的记录？', function(){
+        confirm('确定要删除选中的记录？',()=>{
           $.ajax({
             type: "POST",
             url: baseURL + "sys/dict/delete",
             contentType: "application/json",
             data: JSON.stringify(ids),
-            success: function(r){
+            success:(r)=>{
               if(r.code == 0){
-                alert('操作成功', function(index){
+                alert('操作成功',(index)=>{
                   $("#jqGrid").trigger("reloadGrid");
                 });
               }else{
@@ -129,7 +129,7 @@
           this.dict = r.dict;
         });
       },
-      reload: function (event) {
+      reload:(event)=>{
         this.showList = true;
         var page = $("#jqGrid").jqGrid('getGridParam','page');
         $("#jqGrid").jqGrid('setGridParam',{

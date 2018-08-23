@@ -117,7 +117,7 @@ export default {
     },
     getDept(){
       //加载部门树
-      $.get(baseURL + "sys/dept/list", function(r){
+      $.get(baseURL + "sys/dept/list",(r)=>{
         ztree = $.fn.zTree.init($("#deptTree"), setting, r);
         var node = ztree.getNodeByParam("deptId", this.user.deptId);
         if(node != null){
@@ -146,15 +146,15 @@ export default {
         return ;
       }
 
-      confirm('确定要删除选中的记录？', function(){
+      confirm('确定要删除选中的记录？',()=>{
         $.ajax({
           type: "POST",
           url: baseURL + "sys/user/delete",
           contentType: "application/json",
           data: JSON.stringify(userIds),
-          success: function(r){
+          success:(r)=>{
             if(r.code == 0){
-              alert('操作成功', function(){
+              alert('操作成功',()=>{
                 this.reload();
               });
             }else{
@@ -171,7 +171,7 @@ export default {
         url: baseURL + url,
         contentType: "application/json",
         data: JSON.stringify(this.user),
-        success: function(r){
+        success:(r)=>{
           if(r.code === 0){
             alert('操作成功', function(){
               this.reload();
@@ -183,7 +183,7 @@ export default {
       });
     },
     getUser(userId){
-      $.get(baseURL + "sys/user/info/"+userId, function(r){
+      $.get(baseURL + "sys/user/info/"+userId,(r)=>{
         this.user = r.user;
         this.user.password = null;
 
@@ -191,7 +191,7 @@ export default {
       });
     },
     getRoleList(){
-      $.get(baseURL + "sys/role/select", function(r){
+      $.get(baseURL + "sys/role/select",(r)=>{
         this.roleList = r.list;
       });
     },
@@ -206,7 +206,7 @@ export default {
         shadeClose: false,
         content: jQuery("#deptLayer"),
         btn: ['确定', '取消'],
-        btn1: function (index) {
+        btn1: (index)=>{
           var node = ztree.getSelectedNodes();
           //选择上级部门
           this.user.deptId = node[0].deptId;

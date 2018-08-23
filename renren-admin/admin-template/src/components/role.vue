@@ -118,7 +118,6 @@
         });
       });
 
-//数据树
       window.data_ztree = null;
       window.data_setting = {
         data: {
@@ -136,6 +135,41 @@
           enable:true,
           nocheckInherit:true,
           chkboxType:{ "Y" : "", "N" : "" }
+        }
+      };
+      //菜单树
+      window.menu_ztree;
+      window.menu_setting = {
+        data: {
+          simpleData: {
+            enable: true,
+            idKey: "menuId",
+            pIdKey: "parentId",
+            rootPId: -1
+          },
+          key: {
+            url:"nourl"
+          }
+        },
+        check:{
+          enable:true,
+          nocheckInherit:true
+        }
+      };
+
+//部门结构树
+      window.dept_ztree;
+      window.dept_setting = {
+        data: {
+          simpleData: {
+            enable: true,
+            idKey: "deptId",
+            pIdKey: "parentId",
+            rootPId: -1
+          },
+          key: {
+            url:"nourl"
+          }
         }
       };
     },
@@ -180,7 +214,7 @@
             data: JSON.stringify(roleIds),
             success:(r)=>{
               if(r.code == 0){
-                alert('操作成功', function(){
+                alert('操作成功',()=>{
                   this.reload();
                 });
               }else{
@@ -211,7 +245,7 @@
           this.getDept();
         });
       },
-      saveOrUpdate: function () {
+      saveOrUpdate:()=>{
         //获取选择的菜单
         var nodes = menu_ztree.getCheckedNodes(true);
         var menuIdList = new Array();
@@ -248,7 +282,7 @@
       getMenuTree: function(roleId) {
         //加载菜单树
         $.get(baseURL + "sys/menu/list",(r)=>{
-          menu_ztree = $.fn.zTree.init($("#menuTree"), menu_setting, r);
+          window.menu_ztree = $.fn.zTree.init($("#menuTree"), window.menu_setting, r);
           //展开所有节点
           menu_ztree.expandAll(true);
 
@@ -259,19 +293,19 @@
       },
       getDataTree(roleId) {
         //加载菜单树
-        $.get(baseURL + "sys/dept/list", function(r){
-          data_ztree = $.fn.zTree.init($("#dataTree"), data_setting, r);
+        $.get(baseURL + "sys/dept/list",(r)=>{
+          data_ztree = $.fn.zTree.init($("#dataTree"), window.data_setting, r);
           //展开所有节点
-          data_ztree.expandAll(true);
+          window.data_ztree.expandAll(true);
         });
       },
       getDept(){
         //加载部门树
         $.get(baseURL + "sys/dept/list",(r)=>{
-          dept_ztree = $.fn.zTree.init($("#deptTree"), dept_setting, r);
-          var node = dept_ztree.getNodeByParam("deptId", this.role.deptId);
+          window.dept_ztree = $.fn.zTree.init($("#deptTree"), window.dept_setting, r);
+          var node = window.dept_ztree.getNodeByParam("deptId", this.role.deptId);
           if(node != null){
-            dept_ztree.selectNode(node);
+            window.dept_ztree.selectNode(node);
 
             this.role.deptName = node.name;
           }

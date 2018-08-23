@@ -34,6 +34,28 @@ public class ArticleEntity implements Serializable {
 	 * 
 	 */
 	private String articleDesc;
+
+
+	private String thumbnail;
+
+	public String getThumbnail() {
+		return thumbnail;
+	}
+
+	public void setThumbnail(String thumbnail) {
+		this.thumbnail = thumbnail;
+	}
+
+	private Integer isTop;
+
+	public Integer getIsTop() {
+		return isTop;
+	}
+
+	public void setIsTop(Integer isTop) {
+		this.isTop = isTop;
+	}
+
 	/**
 	 * 
 	 */
