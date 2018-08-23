@@ -88,15 +88,18 @@
       this.getMenuList();
       this.getUser();
     },
-    updated(){
+    mounted(){
 
+    },
+    updated(){
       if($("#larry-side .layui-nav-item>a").length==0 || !isquery){
         return;
       }
       console.log("执行")
       isquery=false;
-      layui.use(['layer','element','laydate'],function(){
+      layui.use(['layer','element','laydate','laypage'],function(){
         window.layer = layui.layer;
+        window.laypage = layui.laypage;
         var element = layui.element;
         $('#larry-nav-side').children('ul').find('li').each(function () {
           var $this = $(this);
@@ -163,6 +166,7 @@
         });
 
       });
+
     },
     methods:{
       getMenuList() {

@@ -56,8 +56,10 @@
     },
     mounted() {
       window.editor = new E(this.$refs.editor)
+      editor.customConfig.height = "700px";
       // 配置服务器端地址
       editor.create();
+
       this.uploadInit();
     }
   }

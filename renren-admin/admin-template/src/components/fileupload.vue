@@ -7,6 +7,7 @@
            <input type="checkbox" :checked="item.checked" style="position:absolute;bottom:2px;right:2px;">
          </div>
      </div>
+     <div id="pages"></div>
    </div>
 </template>
 <script>
@@ -41,13 +42,16 @@
         },
         reload(){
           this.currentPage = 1;
+          this.getImgList(this.currentPage);
+        },
+        getImgList(currentPage){
           $.ajax({
             url: baseURL + 'sys/oss/list',
             type:"get",
             datatype: "json",
             data:{
               limit:10,
-              page:this.currentPage++
+              page:currentPage
             },
             success:(res)=>{
               res.page.list.map((item,index)=>{
@@ -63,6 +67,29 @@
       },
       created(){
 
+      },
+      updated(){
+        if(!this.totalCount){
+            return;
+        }
+        layui.use(["laypage"],()=>{
+          window.laypage = layui.laypage;
+          window.laypage.render({
+            elem:"pages",
+            theme:"#ccc",
+            count:this.totalCount,
+            jump:(obj, first)=>{
+              //obj包含了当前分页的所有参数，比如：
+              console.log(obj.curr); //得到当前页，以便向服务端请求对应页的数据。
+              console.log(obj.limit); //得到每页显示的条数
+              //首次不执行
+              if(!first){
+                //do something
+                this.getImgList(obj.curr)
+              }
+            }
+          })
+        })
       },
       mounted(){
           $.ajax({
