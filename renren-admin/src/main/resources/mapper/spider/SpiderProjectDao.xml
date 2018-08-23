@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.modules.spider.dao.SpiderProjectDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.renren.modules.spider.entity.SpiderProjectEntity" id="spiderProjectMap">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="listUrl" column="list_url"/>
+        <result property="method" column="method"/>
+        <result property="returnContentType" column="return_content_type"/>
+        <result property="charsetName" column="charset_name"/>
+        <result property="pageStart" column="page_start"/>
+        <result property="pageEnd" column="page_end"/>
+        <result property="spiderOptionUserAgent" column="spider_option_user_agent"/>
+        <result property="spiderOptionReferer" column="spider_option_referer"/>
+        <result property="spiderOptionCookie" column="spider_option_cookie"/>
+        <result property="spiderOptionHeader" column="spider_option_header"/>
+        <result property="spiderOptionPostData" column="spider_option_post_data"/>
+        <result property="spiderOptionTimeout" column="spider_option_timeout"/>
+        <result property="detailUrlSelector" column="detail_url_selector"/>
+        <result property="detailUrlArtifact" column="detail_url_artifact"/>
+        <result property="picUrlSelector" column="pic_url_selector"/>
+        <result property="titleSelector" column="title_selector"/>
+        <result property="toTable" column="to_table"/>
+        <result property="createTime" column="create_time"/>
+    </resultMap>
+
+
+</mapper>

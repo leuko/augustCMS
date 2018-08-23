@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.modules.spider.dao.SpiderProjectColumnDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.renren.modules.spider.entity.SpiderProjectColumnEntity" id="spiderProjectColumnMap">
+        <result property="id" column="id"/>
+        <result property="spiderProjectId" column="spider_project_id"/>
+        <result property="tableColumn" column="table_column"/>
+        <result property="fieldSelector" column="field_selector"/>
+        <result property="defaultValue" column="default_value"/>
+        <result property="isPic" column="is_pic"/>
+        <result property="isDate" column="is_date"/>
+        <result property="dateFormat" column="date_format"/>
+        <result property="contentWhitelistType" column="content_whitelist_type"/>
+    </resultMap>
+
+
+</mapper>

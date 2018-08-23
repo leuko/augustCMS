@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.modules.spider.dao.SpiderLogDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.renren.modules.spider.entity.SpiderLogEntity" id="spiderLogMap">
+        <result property="id" column="id"/>
+        <result property="spiderProjectId" column="spider_project_id"/>
+        <result property="detailUrl" column="detail_url"/>
+        <result property="content" column="content"/>
+        <result property="status" column="status"/>
+        <result property="tryCount" column="try_count"/>
+        <result property="errorMsg" column="error_msg"/>
+        <result property="lastTryTime" column="last_try_time"/>
+        <result property="createTime" column="create_time"/>
+    </resultMap>
+
+
+</mapper>
