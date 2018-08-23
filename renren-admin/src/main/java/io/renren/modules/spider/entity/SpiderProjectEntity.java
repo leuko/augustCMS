@@ -83,6 +83,19 @@ public class SpiderProjectEntity implements Serializable {
 	 * 抓取详情页url，人工合成，大括号中的变量为，json中的值，如：http://www.baidu.com/{id}-{name}
 	 */
 	private String detailUrlArtifact;
+
+	//详情页的method
+	private String detail_method;
+
+	//详情页的post data
+	private String detail_post_data;
+
+	//详情页的返回内容类型：json，html
+	private String detail_return_content_type;
+
+	//详情页的伪造来源
+	private String detail_referer;
+
 	/**
 	 * 抓取详情页缩略图的选择器语法，兼容CSS or Jquery；若是JSON数据，直接使用列表中的属性名 
 	 */
@@ -351,6 +364,38 @@ public class SpiderProjectEntity implements Serializable {
 		this.columnEntity = columnEntity;
 	}
 
+	public String getDetail_method() {
+		return detail_method;
+	}
+
+	public void setDetail_method(String detail_method) {
+		this.detail_method = detail_method;
+	}
+
+	public String getDetail_post_data() {
+		return detail_post_data;
+	}
+
+	public void setDetail_post_data(String detail_post_data) {
+		this.detail_post_data = detail_post_data;
+	}
+
+	public String getDetail_return_content_type() {
+		return detail_return_content_type;
+	}
+
+	public void setDetail_return_content_type(String detail_return_content_type) {
+		this.detail_return_content_type = detail_return_content_type;
+	}
+
+	public String getDetail_referer() {
+		return detail_referer;
+	}
+
+	public void setDetail_referer(String detail_referer) {
+		this.detail_referer = detail_referer;
+	}
+
 	@Override
 	public String toString() {
 		return "SpiderProjectEntity{" +
@@ -370,6 +415,10 @@ public class SpiderProjectEntity implements Serializable {
 				", spiderOptionTimeout='" + spiderOptionTimeout + '\'' +
 				", detailUrlSelector='" + detailUrlSelector + '\'' +
 				", detailUrlArtifact='" + detailUrlArtifact + '\'' +
+				", detail_method='" + detail_method + '\'' +
+				", detail_post_data='" + detail_post_data + '\'' +
+				", detail_return_content_type='" + detail_return_content_type + '\'' +
+				", detail_referer='" + detail_referer + '\'' +
 				", picUrlSelector='" + picUrlSelector + '\'' +
 				", titleSelector='" + titleSelector + '\'' +
 				", toTable='" + toTable + '\'' +
