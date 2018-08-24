@@ -30,7 +30,16 @@ public interface SpiderListBusiness {
      */
     List<ArticleUrl> grabDetailUrl(SpiderProjectEntity projectEntity, Integer page) throws IOException;
 
-    Map grabDetail(ArticleUrl articleUrl) throws IOException;
+
+    /**
+     * 抓取详情页的内容
+     * @param projectEntity
+     * @param articleUrl
+     * @return
+     * @throws IOException
+     */
+    Map grabDetail(SpiderProjectEntity projectEntity, ArticleUrl articleUrl) throws IOException;
+
 
     /**
      * 解析 parentUrl 网页中抓取的 subUrl
@@ -55,14 +64,15 @@ public interface SpiderListBusiness {
         }
     }
 
+
     /**
+     * 列表页connection
      * @param projectEntity
      * @param page
      * @return
      * @throws IOException
      */
-    default Document connect(SpiderProjectEntity projectEntity, Integer page) throws IOException {
-
+    default Document connectForList(SpiderProjectEntity projectEntity, Integer page) throws IOException {
 
         String url = projectEntity.getListUrl().replace("{page}", page.toString());
         Connection connection = Jsoup.connect(url);
@@ -70,56 +80,13 @@ public interface SpiderListBusiness {
         logger.debug("Connection url:{}", url);
 
         //post Data
-        String postData = projectEntity.getSpiderOptionPostData();
-        if (postData != null && !"".equals(postData)) {
-            Map mapPostData = new HashMap();
-            Arrays.stream(postData.split("\n")).forEach(line -> {
-                String[] splitLine = line.split(":", 2);
-                if (splitLine.length < 2) return;
-                String originalValue = splitLine[1].trim()
-                        .replace("{page}", page.toString())
-                        .replace("{time}", Long.toString(new Date().getTime()));
-                String treatedValue = originalValue;
-                if (treatedValue.matches("base64|urlencode")) {
-                    treatedValue = treatedValue.substring(0, treatedValue.lastIndexOf("|"));
-                    if (originalValue.contains("urlencode")) {
-                        try {
-                            treatedValue = URLEncoder.encode(treatedValue, "UTF-8");
-                        } catch (UnsupportedEncodingException e) {
-                        }
-                    }
-                    if (originalValue.contains("base64")) {
-                        treatedValue = Base64.getEncoder().encodeToString(treatedValue.getBytes());
-                    }
-                }
-                mapPostData.put(splitLine[0].trim(), treatedValue);
-            });
-            connection.data(mapPostData);
-        }
+        connection.data(replaceDataToMap(projectEntity.getSpiderOptionPostData(), page));
 
         //cookie
-        String cookie = projectEntity.getSpiderOptionCookie();
-        if (cookie != null && !"".equals(cookie)) {
-            Map mapPostData = new HashMap();
-            Arrays.stream(cookie.split("\n")).forEach(line -> {
-                String[] splitLine = line.split(":", 2);
-                if (splitLine.length < 2) return;
-                mapPostData.put(splitLine[0].trim(), splitLine[1].trim().replace("{page}", page.toString()));
-            });
-            connection.cookies(mapPostData);
-        }
+        connection.cookies(replaceDataToMap(projectEntity.getSpiderOptionCookie(), page));
 
         //header
-        String header = projectEntity.getSpiderOptionHeader();
-        if (header != null && !"".equals(header)) {
-            Map mapPostData = new HashMap();
-            Arrays.stream(header.split("\n")).forEach(line -> {
-                String[] splitLine = line.split(":", 2);
-                if (splitLine.length < 2) return;
-                mapPostData.put(splitLine[0].trim(), splitLine[1].trim().replace("{page}", page.toString()));
-            });
-            connection.headers(mapPostData);
-        }
+        connection.headers(replaceDataToMap(projectEntity.getSpiderOptionHeader(), page));
 
         //user agent
         String userAgent = projectEntity.getSpiderOptionUserAgent();
@@ -144,6 +111,91 @@ public interface SpiderListBusiness {
         } else {
             return connection.get();
         }
+    }
+
+    /**
+     * 详情页connection
+     * @param projectEntity
+     * @param articleUrl
+     * @return
+     * @throws IOException
+     */
+    default Document connectForDetail(SpiderProjectEntity projectEntity, ArticleUrl articleUrl) throws IOException {
+
+        String url = articleUrl.getUrl();
+        Connection connection = Jsoup.connect(url);
+        connection.ignoreContentType(true);
+        logger.debug("Connection url:{}", url);
+
+        //post Data
+        connection.data(replaceDataToMap(projectEntity.getDetailPostData(), null));
+
+        //cookie
+        connection.cookies(replaceDataToMap(projectEntity.getSpiderOptionCookie(), null));
+
+        //header
+        connection.headers(replaceDataToMap(projectEntity.getSpiderOptionHeader(), null));
+
+        //user agent
+        String userAgent = projectEntity.getSpiderOptionUserAgent();
+        if (userAgent != null && !"".equals(userAgent)) {
+            connection.userAgent(userAgent);
+        }
+
+        //referer
+        String referer = projectEntity.getDetailReferer();
+        if (referer != null && !"".equals(referer)) {
+            connection.referrer(referer);
+        }
+
+        //timeout
+        String timeout = projectEntity.getSpiderOptionReferer();
+        if (timeout != null && !"".equals(timeout)) {
+            connection.timeout(Integer.valueOf(timeout));
+        }
+
+        if ("post".equals(projectEntity.getDetailMethod())) {
+            return connection.post();
+        } else {
+            return connection.get();
+        }
+    }
+
+    /**
+     * @param postData
+     * @param page
+     * @return
+     */
+    default Map replaceDataToMap(String postData, Integer page) {
+        Map mapPostData = new HashMap();
+        if (postData == null || "".equals(postData)) {
+            return mapPostData;
+        }
+        String curTime = Long.toString(new Date().getTime());
+        Arrays.stream(postData.split("\n")).forEach(line -> {
+            String[] splitLine = line.split(":", 2);
+            if (splitLine.length < 2) return;
+            String originalValue = splitLine[1].trim()
+                    .replace("{time}", Long.toString(new Date().getTime()));
+            if (page != null) {
+                originalValue = originalValue.replace("{page}", page.toString());
+            }
+            String treatedValue = originalValue;
+            if (treatedValue.matches("|base64|urlencode")) {
+                treatedValue = treatedValue.substring(0, treatedValue.lastIndexOf("|"));
+                if (originalValue.contains("urlencode")) {
+                    try {
+                        treatedValue = URLEncoder.encode(treatedValue, "UTF-8");
+                    } catch (UnsupportedEncodingException e) {
+                    }
+                }
+                if (originalValue.contains("base64")) {
+                    treatedValue = Base64.getEncoder().encodeToString(treatedValue.getBytes());
+                }
+            }
+            mapPostData.put(splitLine[0].trim(), treatedValue);
+        });
+        return mapPostData;
     }
 
 }

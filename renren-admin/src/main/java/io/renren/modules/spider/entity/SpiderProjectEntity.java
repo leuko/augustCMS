@@ -85,16 +85,16 @@ public class SpiderProjectEntity implements Serializable {
 	private String detailUrlArtifact;
 
 	//详情页的method
-	private String detail_method;
+	private String detailMethod;
 
 	//详情页的post data
-	private String detail_post_data;
+	private String detailPostData;
 
 	//详情页的返回内容类型：json，html
-	private String detail_return_content_type;
+	private String detailReturnContentType;
 
 	//详情页的伪造来源
-	private String detail_referer;
+	private String detailReferer;
 
 	/**
 	 * 抓取详情页缩略图的选择器语法，兼容CSS or Jquery；若是JSON数据，直接使用列表中的属性名 
@@ -364,36 +364,36 @@ public class SpiderProjectEntity implements Serializable {
 		this.columnEntity = columnEntity;
 	}
 
-	public String getDetail_method() {
-		return detail_method;
+	public String getDetailMethod() {
+		return detailMethod;
 	}
 
-	public void setDetail_method(String detail_method) {
-		this.detail_method = detail_method;
+	public void setDetailMethod(String detailMethod) {
+		this.detailMethod = detailMethod;
 	}
 
-	public String getDetail_post_data() {
-		return detail_post_data;
+	public String getDetailPostData() {
+		return detailPostData;
 	}
 
-	public void setDetail_post_data(String detail_post_data) {
-		this.detail_post_data = detail_post_data;
+	public void setDetailPostData(String detailPostData) {
+		this.detailPostData = detailPostData;
 	}
 
-	public String getDetail_return_content_type() {
-		return detail_return_content_type;
+	public String getDetailReturnContentType() {
+		return detailReturnContentType;
 	}
 
-	public void setDetail_return_content_type(String detail_return_content_type) {
-		this.detail_return_content_type = detail_return_content_type;
+	public void setDetailReturnContentType(String detailReturnContentType) {
+		this.detailReturnContentType = detailReturnContentType;
 	}
 
-	public String getDetail_referer() {
-		return detail_referer;
+	public String getDetailReferer() {
+		return detailReferer;
 	}
 
-	public void setDetail_referer(String detail_referer) {
-		this.detail_referer = detail_referer;
+	public void setDetailReferer(String detailReferer) {
+		this.detailReferer = detailReferer;
 	}
 
 	@Override
@@ -415,10 +415,10 @@ public class SpiderProjectEntity implements Serializable {
 				", spiderOptionTimeout='" + spiderOptionTimeout + '\'' +
 				", detailUrlSelector='" + detailUrlSelector + '\'' +
 				", detailUrlArtifact='" + detailUrlArtifact + '\'' +
-				", detail_method='" + detail_method + '\'' +
-				", detail_post_data='" + detail_post_data + '\'' +
-				", detail_return_content_type='" + detail_return_content_type + '\'' +
-				", detail_referer='" + detail_referer + '\'' +
+				", detailMethod='" + detailMethod + '\'' +
+				", detailPostData='" + detailPostData + '\'' +
+				", detailReturnContentType='" + detailReturnContentType + '\'' +
+				", detailReferer='" + detailReferer + '\'' +
 				", picUrlSelector='" + picUrlSelector + '\'' +
 				", titleSelector='" + titleSelector + '\'' +
 				", toTable='" + toTable + '\'' +

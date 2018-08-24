@@ -5,8 +5,12 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import io.renren.BaseTest;
 import io.renren.modules.spider.business.impl.JsonSpiderListBusinessImpl;
+import io.renren.modules.spider.domain.ArticleUrl;
+import io.renren.modules.spider.entity.SpiderProjectColumnEntity;
 import io.renren.modules.spider.entity.SpiderProjectEntity;
+import io.renren.modules.spider.service.SpiderProjectColumnService;
 import io.renren.modules.spider.service.SpiderProjectService;
+import io.renren.modules.spider.service.impl.SpiderProjectColumnServiceImpl;
 import io.renren.modules.spider.service.impl.SpiderProjectServiceImpl;
 import org.jsoup.nodes.Document;
 import org.junit.Test;
@@ -23,6 +27,9 @@ public class SpiderProjectServiceTest extends BaseTest {
     SpiderProjectServiceImpl spiderProjectService;
 
     @Autowired
+    SpiderProjectColumnServiceImpl spiderProjectColumnService;
+
+    @Autowired
     JsonSpiderListBusinessImpl jsonSpiderListBusiness;
 
     @Test
@@ -30,7 +37,7 @@ public class SpiderProjectServiceTest extends BaseTest {
 
         SpiderProjectEntity spiderProjectEntity = new SpiderProjectEntity();
         spiderProjectEntity.setCharsetName("UTF-8");
-        spiderProjectEntity.setDetailUrlArtifact("https://www.qhee.com/node/listed-company/{id}&{user_name}");
+        spiderProjectEntity.setDetailUrlArtifact("https://www.qhee.com/node/listed-company/{user_id}&{user_name}");
         spiderProjectEntity.setListUrl("https://www.qhee.com/node/proxy-action/qhee-webapp/action/web/entapply/EntApplyAction/queryByCategory?pagesize=16");
         spiderProjectEntity.setMethod("post");
         spiderProjectEntity.setName("qhee");
@@ -43,6 +50,27 @@ public class SpiderProjectServiceTest extends BaseTest {
         spiderProjectEntity.setPicUrlSelector("url");
         spiderProjectEntity.setTitleSelector("full_name");
         spiderProjectService.insert(spiderProjectEntity);
+
+        SpiderProjectColumnEntity spiderProjectColumnEntity1 = new SpiderProjectColumnEntity();
+        spiderProjectColumnEntity1.setSpiderProjectId(1);
+        spiderProjectColumnEntity1.setContentWhitelistType("none");
+        spiderProjectColumnEntity1.setDefaultValue("leuko");
+        spiderProjectColumnEntity1.setTableColumn("meta_title");
+        spiderProjectColumnService.insert(spiderProjectColumnEntity1);
+
+        SpiderProjectColumnEntity spiderProjectColumnEntity2 = new SpiderProjectColumnEntity();
+        spiderProjectColumnEntity2.setSpiderProjectId(1);
+        spiderProjectColumnEntity2.setContentWhitelistType("none");
+        spiderProjectColumnEntity2.setFieldSelector(".main_content .company-detail-box .company-detail-txt h2 a");
+        spiderProjectColumnEntity2.setTableColumn("article_title");
+        spiderProjectColumnService.insert(spiderProjectColumnEntity2);
+
+        SpiderProjectColumnEntity spiderProjectColumnEntity3 = new SpiderProjectColumnEntity();
+        spiderProjectColumnEntity3.setSpiderProjectId(1);
+        spiderProjectColumnEntity3.setContentWhitelistType("none");
+        spiderProjectColumnEntity3.setFieldSelector("#companyInfo");
+        spiderProjectColumnEntity3.setTableColumn("artical_body");
+        spiderProjectColumnService.insert(spiderProjectColumnEntity3);
 
 //        SpiderProjectEntity spiderProjectEntity = new SpiderProjectEntity();
 //        spiderProjectEntity.setCharsetName("UTF-8");
@@ -65,10 +93,17 @@ public class SpiderProjectServiceTest extends BaseTest {
     @Test
     public void grabDetailUrl() throws IOException {
 
-        SpiderProjectEntity spiderProjectEntity = spiderProjectService.selectById(4);
-        List detailUrl = jsonSpiderListBusiness.grabDetailUrl(spiderProjectEntity, 1);
+        SpiderProjectEntity spiderProjectEntity = spiderProjectService.selectByIdWithColumn(1);
+        List<ArticleUrl> detailUrl = jsonSpiderListBusiness.grabDetailUrl(spiderProjectEntity, 1);
 
         System.out.println(JSON.toJSON(detailUrl));
+        detailUrl.forEach(item->{
+            try {
+                Map map = jsonSpiderListBusiness.grabDetail(spiderProjectEntity, item);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
 
 
 

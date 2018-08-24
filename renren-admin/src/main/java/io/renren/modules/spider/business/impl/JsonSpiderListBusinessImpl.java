@@ -29,8 +29,7 @@ public class JsonSpiderListBusinessImpl implements SpiderListBusiness {
             return null;
         }
         // 1、创建 Document
-        Document document = connect(projectEntity, page);
-
+        Document document = connectForList(projectEntity, page);
 
         // 2、解析json
         String json = document.text();
@@ -66,7 +65,15 @@ public class JsonSpiderListBusinessImpl implements SpiderListBusiness {
     }
 
     @Override
-    public Map grabDetail(ArticleUrl articleUrl) throws IOException {
+    public Map grabDetail(SpiderProjectEntity projectEntity, ArticleUrl articleUrl) throws IOException {
+
+        if (!"json".equals(projectEntity.getDetailReturnContentType())) {
+            return null;
+        }
+        // 1、创建 Document
+        Document document = connectForDetail(projectEntity, articleUrl);
+
+        // 2、解析json
 
         return null;
     }
