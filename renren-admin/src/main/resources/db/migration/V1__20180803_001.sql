@@ -162,9 +162,9 @@ INSERT INTO `sys_dict`(`id`, `name`, `type`, `code`, `value`, `order_num`, `rema
 -- 文件上传
 CREATE TABLE `sys_oss` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `url` varchar(200) COMMENT 'URL地址',
-  `title` varchar(64) NULL,
-  `tag` varchar(128) NULL,
+  `url` varchar(256) COMMENT 'URL地址',
+  `title` varchar(256) NULL,
+  `tag` varchar(256) NULL,
   `create_date` datetime COMMENT '创建时间',
   PRIMARY KEY (`id`)
 ) ENGINE=`InnoDB` DEFAULT CHARACTER SET utf8 COMMENT='文件上传';

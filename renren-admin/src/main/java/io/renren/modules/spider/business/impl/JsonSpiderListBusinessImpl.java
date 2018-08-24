@@ -8,15 +8,16 @@ import io.renren.modules.spider.business.SpiderListBusiness;
 import io.renren.modules.spider.domain.ArticleUrl;
 import io.renren.modules.spider.entity.SpiderProjectColumnEntity;
 import io.renren.modules.spider.entity.SpiderProjectEntity;
-import org.jsoup.Connection;
-import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class JsonSpiderListBusinessImpl implements SpiderListBusiness {

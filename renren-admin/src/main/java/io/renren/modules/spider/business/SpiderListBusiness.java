@@ -1,7 +1,6 @@
 package io.renren.modules.spider.business;
 
 import io.renren.common.utils.DateUtils;
-import io.renren.modules.oss.service.SysOssService;
 import io.renren.modules.spider.domain.ArticleUrl;
 import io.renren.modules.spider.entity.SpiderProjectColumnEntity;
 import io.renren.modules.spider.entity.SpiderProjectEntity;
@@ -171,11 +170,10 @@ public interface SpiderListBusiness {
     }
 
     /**
-     *
      * @param baseUrl
      * @param columnEntity
      * @param grabContentFunc 箭头函数：参数为field selector，返回值为抓取到的内容
-     * @param grabImageFunc 箭头函数：参数为抓取图片内容
+     * @param grabImageFunc   箭头函数：参数为抓取图片内容
      * @return
      */
     default Object dealColumnContent(
@@ -203,18 +201,18 @@ public interface SpiderListBusiness {
 
         } else if (columnEntity.getIsDate() == 1) { // 4、是否日期格式
 
-            if(columnEntity.getDateFormat()==null || "".equals(columnEntity.getDateFormat())){
+            if (columnEntity.getDateFormat() == null || "".equals(columnEntity.getDateFormat())) {
                 return null;
             }
             try {
                 return DateUtils.stringToDate(grabContent, columnEntity.getDateFormat());
-            }catch (Exception e){
+            } catch (Exception e) {
                 logger.error("日期转换错误：日期 {}, 格式 {}", grabContent, columnEntity.getDateFormat());
             }
 
         } else { // 5、文本内容处理
             // 过滤白名单外的html tag；过滤内容白名单类型：none,simpleText,basic,basicWithImages,relaxed
-            switch (columnEntity.getContentWhitelistType().toLowerCase()){
+            switch (columnEntity.getContentWhitelistType().toLowerCase()) {
                 case "simpletext":
                     grabContent = Jsoup.clean(grabContent, Whitelist.simpleText());
                     break;

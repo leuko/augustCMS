@@ -1,8 +1,5 @@
 package io.renren.modules.spider.business.impl;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
 import io.renren.modules.oss.service.SysOssService;
 import io.renren.modules.spider.business.SpiderListBusiness;
 import io.renren.modules.spider.domain.ArticleUrl;
