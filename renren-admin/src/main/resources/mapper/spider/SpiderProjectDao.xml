@@ -24,6 +24,10 @@
         <result property="picUrlSelector" column="pic_url_selector"/>
         <result property="titleSelector" column="title_selector"/>
         <result property="toTable" column="to_table"/>
+        <result property="detailReferer" column="detail_referer"/>
+        <result property="detailReturnContentType" column="detail_return_content_type"/>
+        <result property="detailPostData" column="detail_post_data"/>
+        <result property="detailMethod" column="detail_method"/>
         <result property="createTime" column="create_time"/>
         <collection property="columnEntity" ofType="io.renren.modules.spider.entity.SpiderProjectColumnEntity" columnPrefix="columnEntity.">
             <result property="id" column="id"/>
@@ -38,10 +42,15 @@
         </collection>
     </resultMap>
 
-    <select id="selectByIdWithColumn" resultMap="spiderProjectMap">
-      SELECT   p.id, name,list_url,method,return_content_type,charset_name,page_start,page_end,spider_option_user_agent,
+    <sql id="projectFields">
+        p.id, name,list_url,method,return_content_type,charset_name,page_start,page_end,spider_option_user_agent,
       spider_option_referer,spider_option_cookie,spider_option_header, spider_option_post_data, spider_option_timeout, detail_url_selector,
-      detail_url_artifact, pic_url_selector, title_selector, to_table,create_time,
+      detail_url_artifact,detail_referer,detail_return_content_type,detail_post_data,detail_method, pic_url_selector, title_selector, to_table,create_time
+    </sql>
+
+    <select id="selectByIdWithColumn" resultMap="spiderProjectMap">
+      SELECT
+      <include refid="projectFields"/>,
       c.id as "columnEntity.id",
       c.spider_project_id as "columnEntity.spider_project_id",
       c.table_column as "columnEntity.table_column",

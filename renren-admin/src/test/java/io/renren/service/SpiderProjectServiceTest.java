@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import io.renren.BaseTest;
+import io.renren.modules.spider.business.SpiderListBusiness;
 import io.renren.modules.spider.business.impl.JsonSpiderListBusinessImpl;
 import io.renren.modules.spider.domain.ArticleUrl;
 import io.renren.modules.spider.entity.SpiderProjectColumnEntity;
@@ -16,6 +17,7 @@ import org.jsoup.nodes.Document;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.annotation.Resource;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -29,8 +31,51 @@ public class SpiderProjectServiceTest extends BaseTest {
     @Autowired
     SpiderProjectColumnServiceImpl spiderProjectColumnService;
 
-    @Autowired
-    JsonSpiderListBusinessImpl jsonSpiderListBusiness;
+    @Resource(name = "jsonSpiderListBusinessImpl")
+    SpiderListBusiness jsonSpiderListBusiness;
+
+    @Resource(name = "htmlSpiderListBusinessImpl")
+    SpiderListBusiness htmlSpiderListBusiness;
+
+    @Test
+    public void addProjectOfCharger() {
+        SpiderProjectEntity spiderProjectEntity = new SpiderProjectEntity();
+        spiderProjectEntity.setCharsetName("UTF-8");
+//        spiderProjectEntity.setDetailUrlArtifact("https://www.qhee.com/node/listed-company/{user_id}&{user_name}");
+        spiderProjectEntity.setListUrl("http://www.green-charger.com/new-categories/technology?page={page}");
+        spiderProjectEntity.setMethod("get");
+        spiderProjectEntity.setName("charger");
+        spiderProjectEntity.setReturnContentType("html");
+        spiderProjectEntity.setPageStart(1);
+        spiderProjectEntity.setPageEnd(366);
+        spiderProjectEntity.setToTable("articles");
+        spiderProjectEntity.setDetailUrlSelector(".page-contact .news-item .col-lg-3 a");
+//        spiderProjectEntity.setPicUrlSelector("url");
+        spiderProjectEntity.setTitleSelector(".page-contact .news-item .col-lg-9 h2 a");
+        spiderProjectEntity.setDetailReturnContentType("html");
+        spiderProjectService.insert(spiderProjectEntity);
+
+        SpiderProjectColumnEntity spiderProjectColumnEntity1 = new SpiderProjectColumnEntity();
+        spiderProjectColumnEntity1.setSpiderProjectId(2);
+        spiderProjectColumnEntity1.setContentWhitelistType("none");
+        spiderProjectColumnEntity1.setDefaultValue("leuko");
+        spiderProjectColumnEntity1.setTableColumn("meta_title");
+        spiderProjectColumnService.insert(spiderProjectColumnEntity1);
+
+        SpiderProjectColumnEntity spiderProjectColumnEntity2 = new SpiderProjectColumnEntity();
+        spiderProjectColumnEntity2.setSpiderProjectId(2);
+        spiderProjectColumnEntity2.setContentWhitelistType("none");
+        spiderProjectColumnEntity2.setFieldSelector(".page-content .mbx-nav h2");
+        spiderProjectColumnEntity2.setTableColumn("article_title");
+        spiderProjectColumnService.insert(spiderProjectColumnEntity2);
+
+        SpiderProjectColumnEntity spiderProjectColumnEntity3 = new SpiderProjectColumnEntity();
+        spiderProjectColumnEntity3.setSpiderProjectId(2);
+        spiderProjectColumnEntity3.setContentWhitelistType("none");
+        spiderProjectColumnEntity3.setFieldSelector(".page-contact");
+        spiderProjectColumnEntity3.setTableColumn("artical_body");
+        spiderProjectColumnService.insert(spiderProjectColumnEntity3);
+    }
 
     @Test
     public void addSpiderProjectService() {
@@ -93,19 +138,13 @@ public class SpiderProjectServiceTest extends BaseTest {
     @Test
     public void grabDetailUrl() throws IOException {
 
-        SpiderProjectEntity spiderProjectEntity = spiderProjectService.selectByIdWithColumn(1);
-        List<ArticleUrl> detailUrl = jsonSpiderListBusiness.grabDetailUrl(spiderProjectEntity, 1);
+        SpiderProjectEntity projectEntity = spiderProjectService.selectByIdWithColumn(2);
+        List<ArticleUrl> detailUrl = htmlSpiderListBusiness.grabDetailUrl(projectEntity, 1);
 
         System.out.println(JSON.toJSON(detailUrl));
-        detailUrl.forEach(item->{
-            try {
-                Map map = jsonSpiderListBusiness.grabDetail(spiderProjectEntity, item);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
-
-
+        System.out.println(detailUrl.get(1).getUrl());
+        Map map = htmlSpiderListBusiness.grabDetail(projectEntity, detailUrl.get(1));
+        System.out.println(map);
 
     }
 
@@ -122,7 +161,7 @@ public class SpiderProjectServiceTest extends BaseTest {
     }
 
     @Test
-    public void test (){
+    public void test() {
         System.out.println(spiderProjectService.selectByIdWithColumn(1).getColumnEntity());
     }
 }

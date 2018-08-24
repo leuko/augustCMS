@@ -1,6 +1,7 @@
 package io.renren.modules.spider.business;
 
 import io.renren.common.utils.DateUtils;
+import io.renren.modules.oss.service.SysOssService;
 import io.renren.modules.spider.domain.ArticleUrl;
 import io.renren.modules.spider.entity.SpiderProjectColumnEntity;
 import io.renren.modules.spider.entity.SpiderProjectEntity;
@@ -173,10 +174,16 @@ public interface SpiderListBusiness {
      *
      * @param baseUrl
      * @param columnEntity
-     * @param function 箭头函数：参数为field selector，返回值为抓取到的内容
+     * @param grabContentFunc 箭头函数：参数为field selector，返回值为抓取到的内容
+     * @param grabImageFunc 箭头函数：参数为抓取图片内容
      * @return
      */
-    default Object dealColumnContent(String baseUrl, SpiderProjectColumnEntity columnEntity, Function<String, String> function) {
+    default Object dealColumnContent(
+            String baseUrl,
+            SpiderProjectColumnEntity columnEntity,
+            Function<String, String> grabContentFunc,
+            Function<String, String> grabImageFunc
+    ) {
 
         // 1、如果选择器没填，返回默认值
         if (columnEntity.getFieldSelector() == null || "".equals(columnEntity.getFieldSelector())) {
@@ -184,14 +191,15 @@ public interface SpiderListBusiness {
         }
 
         // 2、从选择器中获取内容
-        String grabContent = function.apply(columnEntity.getFieldSelector());
+        String grabContent = grabContentFunc.apply(columnEntity.getFieldSelector());
         if (grabContent == null || "".equals(grabContent)) {
             return columnEntity.getDefaultValue();
         }
 
         if (columnEntity.getIsPic() == 1) { // 3、是否图片 (注意加工：图片路径是否http开头)
 
-            String imgUrl = normalUrl(baseUrl, grabContent);
+            String grabImgUrl = normalUrl(baseUrl, grabContent);
+            return grabImageFunc.apply(grabImgUrl);
 
         } else if (columnEntity.getIsDate() == 1) { // 4、是否日期格式
 
@@ -225,8 +233,16 @@ public interface SpiderListBusiness {
             Elements images = parseDocument.select("img");
             for (Element image : images) {
                 image.setBaseUri(baseUrl);
-                String imgUrl = image.absUrl("src");
+                String grabImgUrl = image.absUrl("src");
+                String imgUrl = grabImageFunc.apply(grabImgUrl);
+                images.attr("src", imgUrl);
             }
+            // 去掉外链
+            Elements as = parseDocument.select("a");
+            for (Element a : as) {
+                a.attr("rel", "nofollow");
+            }
+            return parseDocument.body().html();
 
         }
 

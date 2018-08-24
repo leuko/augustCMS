@@ -20,7 +20,6 @@ import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import io.renren.common.utils.PageUtils;
 import io.renren.common.utils.Query;
-import io.renren.modules.oss.cloud.CloudStorageService;
 import io.renren.modules.oss.cloud.OSSFactory;
 import io.renren.modules.oss.dao.SysOssDao;
 import io.renren.modules.oss.entity.SysOssEntity;
@@ -50,34 +49,49 @@ public class SysOssServiceImpl extends ServiceImpl<SysOssDao, SysOssEntity> impl
      * @param content
      * @return
      */
-    public SysOssEntity upload(String originalFilename, byte[] content) {
+    @Override
+    public SysOssEntity upload(String tag, String originalFilename, byte[] content) {
 
-        //上传文件
-        String suffix = originalFilename.substring(originalFilename.lastIndexOf("."));
-        String url = OSSFactory.build().uploadSuffix(content, suffix);
-
-        //保存文件信息
-        SysOssEntity ossEntity = new SysOssEntity();
-        ossEntity.setUrl(url);
-        ossEntity.setCreateDate(new Date());
-        insert(ossEntity);
-        return ossEntity;
+        return _upload(tag, originalFilename, content);
     }
 
-    public SysOssEntity upload(String originalFilename, InputStream inputStream) throws IOException {
+    /**
+     * @param tag
+     * @param originalFilename
+     * @param inputStream
+     * @return
+     * @throws IOException
+     */
+    @Override
+    public SysOssEntity upload(String tag, String originalFilename, InputStream inputStream) {
 
+        return _upload(tag, originalFilename, inputStream);
+    }
 
+    /**
+     * @param tag
+     * @param originalFilename
+     * @param inputStreamOrByteArray
+     * @return
+     */
+    private SysOssEntity _upload(String tag, String originalFilename, Object inputStreamOrByteArray) {
         //上传文件
         String suffix = originalFilename.substring(originalFilename.lastIndexOf("."));
-        CloudStorageService oss = OSSFactory.build();
-//        oss.upload(inputStream, oss.getPath(oss., suffix))
-
-        String url = OSSFactory.build().uploadSuffix(inputStream, suffix);
+        if (originalFilename.contains("/"))
+            originalFilename = originalFilename.substring(originalFilename.lastIndexOf("/") + 1);
+        String url;
+        if (inputStreamOrByteArray instanceof InputStream) {
+            url = OSSFactory.build().uploadSuffix((InputStream) inputStreamOrByteArray, suffix);
+        } else {
+            url = OSSFactory.build().uploadSuffix((byte[]) inputStreamOrByteArray, suffix);
+        }
 
         //保存文件信息
         SysOssEntity ossEntity = new SysOssEntity();
         ossEntity.setUrl(url);
         ossEntity.setCreateDate(new Date());
+        ossEntity.setTag(tag);
+        ossEntity.setTitle(originalFilename);
         insert(ossEntity);
         return ossEntity;
     }

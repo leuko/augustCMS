@@ -3,6 +3,7 @@ package io.renren.modules.spider.business.impl;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import io.renren.modules.oss.service.SysOssService;
 import io.renren.modules.spider.business.SpiderListBusiness;
 import io.renren.modules.spider.domain.ArticleUrl;
 import io.renren.modules.spider.entity.SpiderProjectColumnEntity;
@@ -10,13 +11,18 @@ import io.renren.modules.spider.entity.SpiderProjectEntity;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.*;
 
 @Service
 public class JsonSpiderListBusinessImpl implements SpiderListBusiness {
+
+    @Autowired
+    SysOssService sysOssService;
 
     /**
      * @param projectEntity
@@ -84,7 +90,19 @@ public class JsonSpiderListBusinessImpl implements SpiderListBusiness {
         // 3、解析字段
         List<SpiderProjectColumnEntity> columnEntities = projectEntity.getColumnEntity();
         for (SpiderProjectColumnEntity columnEntity : columnEntities) {
-            Object columnContent = dealColumnContent(articleUrl.getUrl(), columnEntity, fieldSelector -> valueByPath(fieldSelector, parseObject));
+            Object columnContent = dealColumnContent(
+                    articleUrl.getUrl(),
+                    columnEntity,
+                    fieldSelector -> (String) valueByPath(fieldSelector, parseObject),
+                    imgUrl -> {
+                        try {
+                            return sysOssService.upload("spider", imgUrl, new URL(imgUrl).openStream()).getUrl();
+                        } catch (Exception e) {
+                            logger.error("抓取图片出错：{}, {}",imgUrl, e.getMessage());
+                            return imgUrl;
+                        }
+                    }
+                    );
             resultMap.put(columnEntity.getTableColumn(), columnContent);
         }
 

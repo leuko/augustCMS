@@ -20,6 +20,8 @@ import com.baomidou.mybatisplus.service.IService;
 import io.renren.common.utils.PageUtils;
 import io.renren.modules.oss.entity.SysOssEntity;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Map;
 
 /**
@@ -32,4 +34,8 @@ import java.util.Map;
 public interface SysOssService extends IService<SysOssEntity> {
 
 	PageUtils queryPage(Map<String, Object> params);
+
+	SysOssEntity upload(String tag, String originalFilename, byte[] content);
+
+	SysOssEntity upload(String tag, String originalFilename, InputStream inputStream) throws IOException;
 }
