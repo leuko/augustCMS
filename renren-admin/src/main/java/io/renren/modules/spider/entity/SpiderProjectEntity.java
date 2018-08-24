@@ -1,5 +1,6 @@
 package io.renren.modules.spider.entity;
 
+import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 
@@ -108,11 +109,13 @@ public class SpiderProjectEntity implements Serializable {
 	 * 抓取的数据插入的表
 	 */
 	private String toTable;
+
 	/**
 	 * 
 	 */
 	private Date createTime;
 
+	@TableField(exist=false)
 	private List<SpiderProjectColumnEntity> columnEntity;
 
 	/**

@@ -20,24 +20,66 @@ import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import io.renren.common.utils.PageUtils;
 import io.renren.common.utils.Query;
+import io.renren.modules.oss.cloud.CloudStorageService;
+import io.renren.modules.oss.cloud.OSSFactory;
 import io.renren.modules.oss.dao.SysOssDao;
 import io.renren.modules.oss.entity.SysOssEntity;
 import io.renren.modules.oss.service.SysOssService;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Date;
 import java.util.Map;
 
 
 @Service("sysOssService")
 public class SysOssServiceImpl extends ServiceImpl<SysOssDao, SysOssEntity> implements SysOssService {
 
-	@Override
-	public PageUtils queryPage(Map<String, Object> params) {
-		Page<SysOssEntity> page = this.selectPage(
-				new Query<SysOssEntity>(params).getPage()
-		);
+    @Override
+    public PageUtils queryPage(Map<String, Object> params) {
+        Page<SysOssEntity> page = this.selectPage(
+                new Query<SysOssEntity>(params).getPage()
+        );
 
-		return new PageUtils(page);
-	}
-	
+        return new PageUtils(page);
+    }
+
+    /**
+     * @param originalFilename
+     * @param content
+     * @return
+     */
+    public SysOssEntity upload(String originalFilename, byte[] content) {
+
+        //上传文件
+        String suffix = originalFilename.substring(originalFilename.lastIndexOf("."));
+        String url = OSSFactory.build().uploadSuffix(content, suffix);
+
+        //保存文件信息
+        SysOssEntity ossEntity = new SysOssEntity();
+        ossEntity.setUrl(url);
+        ossEntity.setCreateDate(new Date());
+        insert(ossEntity);
+        return ossEntity;
+    }
+
+    public SysOssEntity upload(String originalFilename, InputStream inputStream) throws IOException {
+
+
+        //上传文件
+        String suffix = originalFilename.substring(originalFilename.lastIndexOf("."));
+        CloudStorageService oss = OSSFactory.build();
+//        oss.upload(inputStream, oss.getPath(oss., suffix))
+
+        String url = OSSFactory.build().uploadSuffix(inputStream, suffix);
+
+        //保存文件信息
+        SysOssEntity ossEntity = new SysOssEntity();
+        ossEntity.setUrl(url);
+        ossEntity.setCreateDate(new Date());
+        insert(ossEntity);
+        return ossEntity;
+    }
+
 }

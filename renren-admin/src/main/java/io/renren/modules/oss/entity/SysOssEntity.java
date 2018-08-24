@@ -41,6 +41,10 @@ public class SysOssEntity implements Serializable {
 	 * URL地址
 	 */
 	private String url;
+
+	private String title;
+
+	private String tag;
 	/**
 	 * 创建时间
 	 */
@@ -82,5 +86,21 @@ public class SysOssEntity implements Serializable {
 	 */
 	public Date getCreateDate() {
 		return createDate;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public String getTag() {
+		return tag;
+	}
+
+	public void setTag(String tag) {
+		this.tag = tag;
 	}
 }

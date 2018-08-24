@@ -2,10 +2,14 @@ package io.renren.modules.spider.business;
 
 import io.renren.common.utils.DateUtils;
 import io.renren.modules.spider.domain.ArticleUrl;
+import io.renren.modules.spider.entity.SpiderProjectColumnEntity;
 import io.renren.modules.spider.entity.SpiderProjectEntity;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.safety.Whitelist;
+import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,6 +19,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URLEncoder;
 import java.util.*;
+import java.util.function.Function;
 
 public interface SpiderListBusiness {
 
@@ -33,6 +38,7 @@ public interface SpiderListBusiness {
 
     /**
      * 抓取详情页的内容
+     *
      * @param projectEntity
      * @param articleUrl
      * @return
@@ -67,6 +73,7 @@ public interface SpiderListBusiness {
 
     /**
      * 列表页connection
+     *
      * @param projectEntity
      * @param page
      * @return
@@ -77,7 +84,7 @@ public interface SpiderListBusiness {
         String url = projectEntity.getListUrl().replace("{page}", page.toString());
         Connection connection = Jsoup.connect(url);
         connection.ignoreContentType(true);
-        logger.debug("Connection url:{}", url);
+        logger.info("Connection url:{}", url);
 
         //post Data
         connection.data(replaceDataToMap(projectEntity.getSpiderOptionPostData(), page));
@@ -115,6 +122,7 @@ public interface SpiderListBusiness {
 
     /**
      * 详情页connection
+     *
      * @param projectEntity
      * @param articleUrl
      * @return
@@ -125,7 +133,7 @@ public interface SpiderListBusiness {
         String url = articleUrl.getUrl();
         Connection connection = Jsoup.connect(url);
         connection.ignoreContentType(true);
-        logger.debug("Connection url:{}", url);
+        logger.info("Connection url:{}", url);
 
         //post Data
         connection.data(replaceDataToMap(projectEntity.getDetailPostData(), null));
@@ -162,6 +170,72 @@ public interface SpiderListBusiness {
     }
 
     /**
+     *
+     * @param baseUrl
+     * @param columnEntity
+     * @param function 箭头函数：参数为field selector，返回值为抓取到的内容
+     * @return
+     */
+    default Object dealColumnContent(String baseUrl, SpiderProjectColumnEntity columnEntity, Function<String, String> function) {
+
+        // 1、如果选择器没填，返回默认值
+        if (columnEntity.getFieldSelector() == null || "".equals(columnEntity.getFieldSelector())) {
+            return columnEntity.getDefaultValue();
+        }
+
+        // 2、从选择器中获取内容
+        String grabContent = function.apply(columnEntity.getFieldSelector());
+        if (grabContent == null || "".equals(grabContent)) {
+            return columnEntity.getDefaultValue();
+        }
+
+        if (columnEntity.getIsPic() == 1) { // 3、是否图片 (注意加工：图片路径是否http开头)
+
+            String imgUrl = normalUrl(baseUrl, grabContent);
+
+        } else if (columnEntity.getIsDate() == 1) { // 4、是否日期格式
+
+            if(columnEntity.getDateFormat()==null || "".equals(columnEntity.getDateFormat())){
+                return null;
+            }
+            try {
+                return DateUtils.stringToDate(grabContent, columnEntity.getDateFormat());
+            }catch (Exception e){
+                logger.error("日期转换错误：日期 {}, 格式 {}", grabContent, columnEntity.getDateFormat());
+            }
+
+        } else { // 5、文本内容处理
+            // 过滤白名单外的html tag；过滤内容白名单类型：none,simpleText,basic,basicWithImages,relaxed
+            switch (columnEntity.getContentWhitelistType().toLowerCase()){
+                case "simpletext":
+                    grabContent = Jsoup.clean(grabContent, Whitelist.simpleText());
+                    break;
+                case "basic":
+                    grabContent = Jsoup.clean(grabContent, Whitelist.basic());
+                    break;
+                case "basicwithimages":
+                    grabContent = Jsoup.clean(grabContent, Whitelist.basicWithImages());
+                    break;
+                case "relaxed":
+                    grabContent = Jsoup.clean(grabContent, Whitelist.relaxed());
+                    break;
+            }
+            // 内容中的图片下载到oss (注意加工：图片路径是否http开头)
+            Document parseDocument = Jsoup.parse(grabContent);
+            Elements images = parseDocument.select("img");
+            for (Element image : images) {
+                image.setBaseUri(baseUrl);
+                String imgUrl = image.absUrl("src");
+            }
+
+        }
+
+        return null;
+    }
+
+    /**
+     * Connection中的 Post Data, cookie, header 中{time}{page}变量的替换，modifier base64，urlencode的执行
+     *
      * @param postData
      * @param page
      * @return

@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import io.renren.modules.spider.business.SpiderListBusiness;
 import io.renren.modules.spider.domain.ArticleUrl;
+import io.renren.modules.spider.entity.SpiderProjectColumnEntity;
 import io.renren.modules.spider.entity.SpiderProjectEntity;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
@@ -25,21 +26,21 @@ public class JsonSpiderListBusinessImpl implements SpiderListBusiness {
      */
     @Override
     public List<ArticleUrl> grabDetailUrl(SpiderProjectEntity projectEntity, Integer page) throws IOException {
+        List detailUrl = new ArrayList();
         if (!"json".equals(projectEntity.getReturnContentType())) {
-            return null;
+            return detailUrl;
         }
         // 1、创建 Document
         Document document = connectForList(projectEntity, page);
 
         // 2、解析json
         String json = document.text();
-        logger.debug("Response: {}", json);
+        logger.info("Response: {}", json);
         JSONObject parseObject = (JSONObject) JSON.parse(json);
 
         // 3、解析字段
         JSONArray result = valueByPath(projectEntity.getDetailUrlSelector(), parseObject);
 
-        List detailUrl = new ArrayList();
         for (Object item : result.toArray()) {
             JSONObject tmpJsonObject = (JSONObject) item;
             ArticleUrl articleUrl = new ArticleUrl();
@@ -67,15 +68,27 @@ public class JsonSpiderListBusinessImpl implements SpiderListBusiness {
     @Override
     public Map grabDetail(SpiderProjectEntity projectEntity, ArticleUrl articleUrl) throws IOException {
 
+        Map resultMap = new HashMap();
+
         if (!"json".equals(projectEntity.getDetailReturnContentType())) {
-            return null;
+            return resultMap;
         }
         // 1、创建 Document
         Document document = connectForDetail(projectEntity, articleUrl);
 
         // 2、解析json
+        String json = document.text();
+        logger.info("Response: {}", json);
+        JSONObject parseObject = (JSONObject) JSON.parse(json);
 
-        return null;
+        // 3、解析字段
+        List<SpiderProjectColumnEntity> columnEntities = projectEntity.getColumnEntity();
+        for (SpiderProjectColumnEntity columnEntity : columnEntities) {
+            Object columnContent = dealColumnContent(articleUrl.getUrl(), columnEntity, fieldSelector -> valueByPath(fieldSelector, parseObject));
+            resultMap.put(columnEntity.getTableColumn(), columnContent);
+        }
+
+        return resultMap;
     }
 
     /**
