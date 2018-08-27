@@ -2,8 +2,10 @@ package io.renren.modules.spider.service;
 
 import com.baomidou.mybatisplus.service.IService;
 import io.renren.common.utils.PageUtils;
+import io.renren.modules.spider.entity.SpiderProjectColumnEntity;
 import io.renren.modules.spider.entity.SpiderProjectEntity;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -16,5 +18,8 @@ import java.util.Map;
 public interface SpiderProjectService extends IService<SpiderProjectEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
+
+    Integer selectLastKey();
+
 }
 

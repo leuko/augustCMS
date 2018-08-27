@@ -1,6 +1,8 @@
 package io.renren.modules.spider.service.impl;
 
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 import java.util.Map;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
@@ -25,5 +27,16 @@ public class SpiderProjectColumnServiceImpl extends ServiceImpl<SpiderProjectCol
 
         return new PageUtils(page);
     }
+
+    @Override
+    public List<SpiderProjectColumnEntity> selectBySpiderProjectId(Integer id) {
+        return this.baseMapper.selectBySpiderProjectId(id);
+    }
+
+    @Override
+    public Boolean deleteBySpiderProjectId(Integer id) {
+         return this.baseMapper.deleteBySpiderProjectId(id);
+    }
+
 
 }

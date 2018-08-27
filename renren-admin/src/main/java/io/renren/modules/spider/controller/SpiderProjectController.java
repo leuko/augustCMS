@@ -1,9 +1,12 @@
 package io.renren.modules.spider.controller;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 import io.renren.common.validator.ValidatorUtils;
+import io.renren.modules.spider.entity.SpiderProjectColumnEntity;
+import io.renren.modules.spider.service.SpiderProjectColumnService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,6 +35,11 @@ public class SpiderProjectController {
     @Autowired
     private SpiderProjectService spiderProjectService;
 
+
+    @Autowired
+    private SpiderProjectColumnService spiderProjectColumnService;
+
+
     /**
      * 列表
      */
@@ -51,7 +59,8 @@ public class SpiderProjectController {
     @RequiresPermissions("spider:spiderproject:info")
     public R info(@PathVariable("id") Integer id){
         SpiderProjectEntity spiderProject = spiderProjectService.selectById(id);
-
+        List spiderProjectColumnEntityList = spiderProjectColumnService.selectBySpiderProjectId(id);
+        spiderProject.setSpiderProjectColumnEntityList(spiderProjectColumnEntityList);
         return R.ok().put("spiderProject", spiderProject);
     }
 
@@ -62,7 +71,13 @@ public class SpiderProjectController {
     @RequiresPermissions("spider:spiderproject:save")
     public R save(@RequestBody SpiderProjectEntity spiderProject){
         spiderProjectService.insert(spiderProject);
+        System.out.println(spiderProject);
+        Integer integer = spiderProjectService.selectLastKey();
 
+        for(SpiderProjectColumnEntity spiderProjectColumnEntity : spiderProject.getSpiderProjectColumnEntityList()){
+            spiderProjectColumnEntity.setSpiderProjectId(integer);
+            spiderProjectColumnService.insert(spiderProjectColumnEntity);
+        }
         return R.ok();
     }
 
@@ -74,7 +89,14 @@ public class SpiderProjectController {
     public R update(@RequestBody SpiderProjectEntity spiderProject){
         ValidatorUtils.validateEntity(spiderProject);
         spiderProjectService.updateAllColumnById(spiderProject);//全部更新
-        
+        for(SpiderProjectColumnEntity spiderProjectColumnEntity : spiderProject.getSpiderProjectColumnEntityList()){
+            if(spiderProjectColumnEntity.getId() == null){
+                spiderProjectColumnEntity.setSpiderProjectId(spiderProject.getId());
+                spiderProjectColumnService.insert(spiderProjectColumnEntity);
+            }else{
+                spiderProjectColumnService.updateAllColumnById(spiderProjectColumnEntity);
+            }
+        }
         return R.ok();
     }
 
@@ -85,7 +107,9 @@ public class SpiderProjectController {
     @RequiresPermissions("spider:spiderproject:delete")
     public R delete(@RequestBody Integer[] ids){
         spiderProjectService.deleteBatchIds(Arrays.asList(ids));
-
+        for(Integer id : ids){
+            spiderProjectColumnService.deleteBySpiderProjectId(id);
+        }
         return R.ok();
     }
 

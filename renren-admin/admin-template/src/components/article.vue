@@ -189,6 +189,7 @@
               layer.close(this.layerIndex);
             },
             openFileSelected(e){
+                e.preventDefault()
               this.layerIndex = layer.open({
                 type: 1,
                 skin:'select-file-modal',

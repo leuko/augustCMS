@@ -1,8 +1,10 @@
 package io.renren.modules.spider.service.impl;
 
+import io.renren.modules.spider.entity.SpiderProjectColumnEntity;
 import org.springframework.stereotype.Service;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Map;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
@@ -27,6 +29,12 @@ public class SpiderProjectServiceImpl extends ServiceImpl<SpiderProjectDao, Spid
 
         return new PageUtils(page);
     }
+
+    @Override
+    public Integer selectLastKey() {
+        return this.baseMapper.selectLastKey();
+    }
+
 
     public SpiderProjectEntity selectByIdWithColumn(Integer id){
 

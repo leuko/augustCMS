@@ -63,6 +63,9 @@
       FROM spider_projects p left join spider_project_columns c on p.id=c.spider_project_id
       where p.id=#{id}
     </select>
+    <select id="selectLastKey" resultType="java.lang.Integer">
+        SELECT @@IDENTITY as id
+    </select>
 
 
 </mapper>

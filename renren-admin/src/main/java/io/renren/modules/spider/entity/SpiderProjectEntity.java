@@ -19,6 +19,17 @@ import java.util.List;
 public class SpiderProjectEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
+	@TableField(exist = false)
+	private List<SpiderProjectColumnEntity> spiderProjectColumnEntityList;
+
+	public List<SpiderProjectColumnEntity> getSpiderProjectColumnEntityList() {
+		return spiderProjectColumnEntityList;
+	}
+
+	public void setSpiderProjectColumnEntityList(List<SpiderProjectColumnEntity> spiderProjectColumnEntityList) {
+		this.spiderProjectColumnEntityList = spiderProjectColumnEntityList;
+	}
+
 	/**
 	 * 
 	 */
@@ -402,7 +413,8 @@ public class SpiderProjectEntity implements Serializable {
 	@Override
 	public String toString() {
 		return "SpiderProjectEntity{" +
-				"id=" + id +
+				"spiderProjectColumnEntityList=" + spiderProjectColumnEntityList +
+				", id=" + id +
 				", name='" + name + '\'' +
 				", listUrl='" + listUrl + '\'' +
 				", method='" + method + '\'' +

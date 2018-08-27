@@ -15,6 +15,13 @@
         <result property="dateFormat" column="date_format"/>
         <result property="contentWhitelistType" column="content_whitelist_type"/>
     </resultMap>
+    <delete id="deleteBySpiderProjectId" parameterType="integer" >
+        DELETE FROM `spider_project_columns` WHERE `spider_project_id` = #{id}
+    </delete>
+    <select id="selectBySpiderProjectId"
+            resultType="io.renren.modules.spider.entity.SpiderProjectColumnEntity" parameterType="integer">
+        SELECT * FROM `spider_project_columns` WHERE `spider_project_id` = #{id}
+    </select>
 
 
 </mapper>

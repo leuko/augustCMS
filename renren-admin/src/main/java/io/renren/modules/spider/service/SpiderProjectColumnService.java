@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.service.IService;
 import io.renren.common.utils.PageUtils;
 import io.renren.modules.spider.entity.SpiderProjectColumnEntity;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -16,5 +17,9 @@ import java.util.Map;
 public interface SpiderProjectColumnService extends IService<SpiderProjectColumnEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
+
+    List<SpiderProjectColumnEntity> selectBySpiderProjectId(Integer id);
+
+    Boolean deleteBySpiderProjectId(Integer id);
 }
 

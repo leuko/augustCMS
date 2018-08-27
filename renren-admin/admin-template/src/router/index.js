@@ -13,6 +13,7 @@ import ScheduleLog from "@/components/scheduleLog"
 import DruidSql from "@/components/druidSql"
 import Article from "@/components/article"
 import Articlecategory from "@/components/articlecategory"
+import Spiderproject from "@/components/spiderproject"
 
 Vue.use(Router)
 export default new Router({
@@ -68,6 +69,10 @@ export default new Router({
     {
       path:"/articlecategory",
       component:Articlecategory
+    },
+    {
+      path:"/spiderproject",
+      component:Spiderproject
     }
   ]
 })

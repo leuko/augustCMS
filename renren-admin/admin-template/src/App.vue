@@ -5,7 +5,7 @@
         <div class="layui-main">
           <!-- logo区域 -->
           <div class="admin-logo-box">
-            <a class="logo" href="javascript:;">人人权限系统</a>
+            <a class="logo" href="javascript:;">四板网后台系统</a>
             <div class="larry-side-menu">
               <i class="fa fa-bars" aria-hidden="true"></i>
             </div>

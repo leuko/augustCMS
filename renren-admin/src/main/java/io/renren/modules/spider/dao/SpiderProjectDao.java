@@ -15,4 +15,5 @@ import java.io.Serializable;
 public interface SpiderProjectDao extends BaseMapper<SpiderProjectEntity> {
 
     SpiderProjectEntity selectByIdWithColumn(Serializable serializable);
+    Integer selectLastKey();
 }

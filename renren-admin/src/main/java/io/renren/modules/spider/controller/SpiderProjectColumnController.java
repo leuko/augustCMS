@@ -83,9 +83,8 @@ public class SpiderProjectColumnController {
      */
     @RequestMapping("/delete")
     @RequiresPermissions("spider:spiderprojectcolumn:delete")
-    public R delete(@RequestBody Integer[] ids){
-        spiderProjectColumnService.deleteBatchIds(Arrays.asList(ids));
-
+    public R delete(Integer ids){
+        spiderProjectColumnService.deleteById(ids);
         return R.ok();
     }
 
